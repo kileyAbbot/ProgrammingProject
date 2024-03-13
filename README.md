@@ -1,2 +1,2 @@
 # ProgrammingProjectGroup 34:
-Names: Kiley Abbot, 
+Names: Kiley Abbot, Suvd Ulambayar
