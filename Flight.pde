@@ -1,4 +1,4 @@
-class StoreTest
+class Flight
 {
   String date;
   String airline;
@@ -18,7 +18,7 @@ class StoreTest
   int isDiverted;
   int distanceTraveledMi;
   
-  StoreTest(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
+  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)
   {
     this.date = date;
