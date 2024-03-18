@@ -2,6 +2,9 @@ Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
+final int BAR_CHART_MARGIN = 50; 
+final int BAR_CHART_BAR_LENGTH = 50; 
+final int BAR_CHART_MAX_HEIGHT = 500;
 void setup()
 {
   size(1920, 1080);
@@ -93,6 +96,9 @@ String longestDistanceFlightString = "";
   standardDeviationString+="Standard deviation of distance travelled by flights in miles in this dataset : " + standardDeviation;
   textSize(20);
   text(standardDeviationString, 500, 350 );
+  
+  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo );
+  displayFrequencyBarChart( flightDistanceFrequency );
 
 
 
@@ -210,5 +216,24 @@ int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
 
 void displayFrequencyBarChart( int[] flightFrequency )
 {
+  int mostFrequentIndex = 0;
+  int mostFrequentBracketValue = 0;
   
+  for ( int i = 0; i<flightFrequency.length; i++ )
+  {
+   if ( flightFrequency[i] > mostFrequentBracketValue )
+   {
+    mostFrequentBracketValue=flightFrequency[i];
+    mostFrequentIndex=i; 
+   }
+  }
+  
+  for ( int i = 0; i<flightFrequency.length; i++)
+  {
+    float temp1 = flightFrequency[i]/flightFrequency[mostFrequentIndex];
+    
+    float temp = ((BAR_CHART_MAX_HEIGHT)*temp1);
+    rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), (SCREEN_Y/3), (BAR_CHART_BAR_LENGTH), temp );
+    // println(i);
+  }
 }
