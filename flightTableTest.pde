@@ -4,7 +4,7 @@ final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
 void setup()
 {
-  size(SCREEN_X, SCREEN_Y);
+  size(1920, 1080);
   flightTable = loadTable("flights2kCSV.csv", "header");
   /*  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)*/
