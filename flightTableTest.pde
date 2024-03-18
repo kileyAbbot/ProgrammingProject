@@ -1,8 +1,10 @@
 Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
+final int SCREEN_X = 1920;
+final int SCREEN_Y = 1080;
 void setup()
 {
-  size(1920, 1080);
+  size(SCREEN_X, SCREEN_Y);
   flightTable = loadTable("flights2kCSV.csv", "header");
   /*  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)*/
@@ -16,6 +18,13 @@ void setup()
   for(int i = 0; i < 5; i++)
   {
     System.out.println(flightsInfo.get(i).printFlight());
+  }
+    
+  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo );
+  
+  for ( int i = 0; i<flightDistanceFrequency.length; i++ )
+  {
+    println("Number of flights in " + i*1000 + "-" + (i+1)*1000 + " miles bracket : " + flightDistanceFrequency[i]); 
   }
 }
 void draw()
@@ -50,16 +59,16 @@ void draw()
   }
 
 String longestDistanceFlightString = "";
-  int longestDistanceFlightIndex = getLongestDistanceFlightIndex();
+  int longestDistanceFlightIndex = getLongestDistanceFlightIndex( flightsInfo );
   longestDistanceFlightString += "The greatest distance travelled was " + flightsInfo.get(longestDistanceFlightIndex).distanceTraveledMi + " miles, on " +
   flightsInfo.get(longestDistanceFlightIndex).date + " with " + flightsInfo.get(longestDistanceFlightIndex).airline + " from " + flightsInfo.get(longestDistanceFlightIndex).originAirport + ", " + 
   flightsInfo.get(longestDistanceFlightIndex).originCity + ", " + flightsInfo.get(longestDistanceFlightIndex).originState + " to " + flightsInfo.get(longestDistanceFlightIndex).destinationAirport +
   ", " + flightsInfo.get(longestDistanceFlightIndex).destinationCity + ", " + flightsInfo.get(longestDistanceFlightIndex).destinationState;
   textSize(20);
-  text(longestDistanceFlightString, 500, 100 );
+  text(longestDistanceFlightString, 500, 150 );
   
   String shortestDistanceFlightString = "";
-  int shortestDistanceFlightIndex = getShortestDistanceFlightIndex();
+  int shortestDistanceFlightIndex = getShortestDistanceFlightIndex( flightsInfo );
   shortestDistanceFlightString += "The least distance travelled was " + flightsInfo.get(shortestDistanceFlightIndex).distanceTraveledMi + " miles, on " +
   flightsInfo.get(shortestDistanceFlightIndex).date + " with " + flightsInfo.get(shortestDistanceFlightIndex).airline + " from " + flightsInfo.get(shortestDistanceFlightIndex).originAirport + ", " + 
   flightsInfo.get(shortestDistanceFlightIndex).originCity + ", " + flightsInfo.get(shortestDistanceFlightIndex).originState + " to " + flightsInfo.get(shortestDistanceFlightIndex).destinationAirport +
@@ -68,37 +77,39 @@ String longestDistanceFlightString = "";
   text(shortestDistanceFlightString, 500, 200 );
   
   String averageDistanceString ="";
-  double averageFlightDistance = getAverageFlightDistance();
+  double averageFlightDistance = getAverageFlightDistance( flightsInfo );
   averageDistanceString+="Average miles travelled by flights in this dataset : " + averageFlightDistance;
   textSize(20);
   text(averageDistanceString, 500, 250 );
   
   String rangeString="";
-  int rangeDistance = getRangeDistance();
+  int rangeDistance = getRangeDistance( flightsInfo );
   rangeString+="Range of distance in miles travelled by flights in this dataset : " + rangeDistance;
   textSize(20);
   text(rangeString, 500, 300 );
   
   String standardDeviationString="";
-  double standardDeviation = getStandardDeviation();
+  double standardDeviation = getStandardDeviation( flightsInfo );
   standardDeviationString+="Standard deviation of distance travelled by flights in miles in this dataset : " + standardDeviation;
   textSize(20);
   text(standardDeviationString, 500, 350 );
 
 
+
 }
 
-int getLongestDistanceFlightIndex()
+int getLongestDistanceFlightIndex( ArrayList flightsSet )
 {
   
+  ArrayList <Flight> flights = flightsSet;
   int distance = 0;
   int flightInfo = 0;
  
-  for ( int i = 0; i<flightsInfo.size(); i++ ) 
+  for ( int i = 0; i<flights.size(); i++ ) 
   {
-    if ( flightsInfo.get(i).distanceTraveledMi > distance )
+    if ( flights.get(i).distanceTraveledMi > distance )
     {
-      distance = flightsInfo.get(i).distanceTraveledMi;
+      distance = flights.get(i).distanceTraveledMi;
       flightInfo = i;
     }
   }
@@ -106,16 +117,17 @@ int getLongestDistanceFlightIndex()
   return flightInfo;
 }
 
-int getShortestDistanceFlightIndex()
+int getShortestDistanceFlightIndex( ArrayList flightsSet )
 {
-  int distance = 99999;
+  ArrayList <Flight> flights = flightsSet;
+  int distance = flights.get(0).distanceTraveledMi;
   int flightInfo = 0;
  
-  for ( int i = 0; i<flightsInfo.size(); i++ ) 
+  for ( int i = 0; i<flights.size(); i++ ) 
   {
-    if ( flightsInfo.get(i).distanceTraveledMi < distance )
+    if ( flights.get(i).distanceTraveledMi < distance )
     {
-      distance = flightsInfo.get(i).distanceTraveledMi;
+      distance = flights.get(i).distanceTraveledMi;
       flightInfo = i;
     }
   }
@@ -123,14 +135,15 @@ int getShortestDistanceFlightIndex()
   return flightInfo;
 }
 
-double getAverageFlightDistance()
+double getAverageFlightDistance( ArrayList flightsSet )
 {
   
+  ArrayList <Flight> flights = flightsSet;
   double total = 0;
  
-  for ( int i = 0; i<flightsInfo.size(); i++ )
+  for ( int i = 0; i<flights.size(); i++ )
   {
-    int distance  = flightsInfo.get(i).distanceTraveledMi;
+    int distance  = flights.get(i).distanceTraveledMi;
     total+=(double)distance;
   }
   
@@ -139,26 +152,63 @@ double getAverageFlightDistance()
   
 }
 
-int getRangeDistance()
+int getRangeDistance( ArrayList flightsSet )
 {
-  int longestDistanceFlightIndex = getLongestDistanceFlightIndex();
-  int shortestDistanceFlightIndex = getShortestDistanceFlightIndex();
-  int range = flightsInfo.get(longestDistanceFlightIndex).distanceTraveledMi - flightsInfo.get(shortestDistanceFlightIndex).distanceTraveledMi;
+  ArrayList <Flight> flights = flightsSet;
+  int longestDistanceFlightIndex = getLongestDistanceFlightIndex( flights );
+  int shortestDistanceFlightIndex = getShortestDistanceFlightIndex( flights );
+  int range = flights.get(longestDistanceFlightIndex).distanceTraveledMi - flights.get(shortestDistanceFlightIndex).distanceTraveledMi;
   return range;
 }
 
-double getStandardDeviation()
+double getStandardDeviation( ArrayList flightsSet )
 {
-  double average = getAverageFlightDistance();
+  ArrayList <Flight> flights = flightsSet;
+  double average = getAverageFlightDistance( flights );
   double sumOfSquaredDifferences = 0.0; 
-  for ( int i = 0; i<flightsInfo.size(); i++)
+  for ( int i = 0; i<flights.size(); i++)
   {
-   double difference=(flightsInfo.get(i).distanceTraveledMi-average);
+   double difference=(flights.get(i).distanceTraveledMi-average);
    sumOfSquaredDifferences+=Math.pow(difference,2);
   }
   
-  double variance = sumOfSquaredDifferences/(flightsInfo.size()-1);
+  double variance = sumOfSquaredDifferences/(flights.size()-1);
   double standardDeviation = Math.sqrt(variance);
   return standardDeviation;
+  
+}
+
+int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
+{
+  ArrayList <Flight> flights = flightsSet;
+  int longestDistanceFlightIndex = getLongestDistanceFlightIndex( flights );
+  int longestDistanceFlight = flights.get(longestDistanceFlightIndex).distanceTraveledMi;
+  int flightDistanceBrackets = 0;
+  for ( int i = 0; i<longestDistanceFlight; i+=1000 )
+  {
+    flightDistanceBrackets++;
+  }
+  
+  int[] flightFrequency = new int[flightDistanceBrackets];
+  
+  for ( int i = 0; i<flights.size(); i++ )
+  {
+    for ( int a = 0; a<flightDistanceBrackets; a++ )
+    {
+      if ( flights.get(i).distanceTraveledMi>=a*1000 && flights.get(i).distanceTraveledMi<(a+1)*1000 )
+      {
+        flightFrequency[a]++;
+      }
+    }
+  }
+  
+  return flightFrequency;
+  
+  // Should be able to alter this to make frequency of any statistic with adjustment 
+  
+}
+
+void displayFrequencyBarChart( int[] flightFrequency )
+{
   
 }
