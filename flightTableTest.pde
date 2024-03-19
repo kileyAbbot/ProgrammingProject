@@ -216,7 +216,7 @@ int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
 
 void displayFrequencyBarChart( int[] flightFrequency )
 {
-  int mostFrequentIndex = 0;
+  int mostFrequentBracketValueIndex = 0;
   int mostFrequentBracketValue = 0;
   
   for ( int i = 0; i<flightFrequency.length; i++ )
@@ -224,16 +224,16 @@ void displayFrequencyBarChart( int[] flightFrequency )
    if ( flightFrequency[i] > mostFrequentBracketValue )
    {
     mostFrequentBracketValue=flightFrequency[i];
-    mostFrequentIndex=i; 
+    mostFrequentBracketValueIndex=i; 
    }
   }
   
   for ( int i = 0; i<flightFrequency.length; i++)
   {
-    float temp1 = flightFrequency[i]/flightFrequency[mostFrequentIndex];
+    float BAR_CHART_HEIGHT = BAR_CHART_MAX_HEIGHT*(((float)flightFrequency[i])/((float)mostFrequentBracketValue));
     
-    float temp = ((BAR_CHART_MAX_HEIGHT)*temp1);
-    rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), (SCREEN_Y/3), (BAR_CHART_BAR_LENGTH), temp );
+    
+    rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/3) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)), (BAR_CHART_BAR_LENGTH), (BAR_CHART_HEIGHT)) ;
     // println(i);
   }
 }
