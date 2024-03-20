@@ -220,8 +220,6 @@ class Flight
   }
   
   
-  
-  
   boolean flightCancelled(Flight flightCancel)
   {
     if(flightCancel.getIsCancelled() == 1)
@@ -243,6 +241,56 @@ class Flight
     else
     {
       return false;
+    }
+  }
+  
+  String decodeAirline(Flight plane)
+  {
+    String airline = plane.getAirline();
+    String fullAirline;
+    if(airline.equals("AA"))
+    {
+      fullAirline = "American Airlines";
+    }
+    else if(airline.equals("AS"))
+    {
+      fullAirline = "Alaska Airlines";
+    }
+    else if(airline.equals("B6"))
+    {
+      fullAirline = "JetBlue";
+    }
+    else if(airline.equals("HA"))
+    {
+      fullAirline = "Hawaiian Airlines";
+    }
+    else if(airline.equals("NK"))
+    {
+      fullAirline = "Spirit Airlines";
+    }
+    else if(airline.equals("AS"))
+    {
+      fullAirline = "Alaska Airlines";
+    }
+    else if(airline.equals("G4"))
+    {
+      fullAirline = "Allegiant Airlines";
+    }
+    else if(airline.equals("WN"))
+    {
+      fullAirline = "Southwest Airlines";
+    }
+    else if(airline.equals("F9"))
+    {
+      fullAirline = "Frontier Airlines";
+    }
+    else if(airline.equals("UA"))
+    {
+      fullAirline = "United Airlines";
+    }
+    else if(airline.equals("DL"))
+    {
+      fullAirline = "Delta Airlines";
     }
   }
   
