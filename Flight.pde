@@ -96,5 +96,63 @@ class Flight
     return originState;
   }
   
+  int getOriginWAC()
+  {
+    return originWAC;
+  }
   
+  String getDestinationAirport()
+  {
+    return destinationAirport;
+  }
+  
+  String getDestinationCity()
+  {
+    return destinationCity;
+  }
+  
+  String getDestinationState()
+  {
+    return destinationState;
+  }
+  
+  int getDestinationWAC()
+  {
+    return destinationWAC;
+  }
+  
+  int getScheduledDeparture()
+  {
+    return scheduledDeparture;
+  }
+  
+  int getActualDeparture()
+  {
+    return actualDeparture;
+  }
+  
+  int getScheduledArrival()
+  {
+    return scheduledArrival;
+  }
+  
+  int getActualArrival()
+  {
+    return actualArrival;
+  }
+  
+  int getIsCancelled()
+  {
+    return isCancelled;
+  }
+  
+  int getIsDiverted()
+  {
+    return isDiverted;
+  }
+  
+  int getDistanceTraveled()
+  {
+    return distanceTraveledMi;
+  }
 }
