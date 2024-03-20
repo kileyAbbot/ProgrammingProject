@@ -4,7 +4,8 @@ final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
 final int BAR_CHART_MARGIN = 50; 
 final int BAR_CHART_BAR_LENGTH = 50; 
-final int BAR_CHART_MAX_HEIGHT = 500;
+final int BAR_CHART_MAX_HEIGHT = 400;
+final int BAR_CHART_HEIGHT = 500;
 void setup()
 {
   size(1920, 1080);
@@ -23,7 +24,7 @@ void setup()
     System.out.println(flightsInfo.get(i).printFlight());
   }
     
-  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo );
+  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo, 1000 );
   
   for ( int i = 0; i<flightDistanceFrequency.length; i++ )
   {
@@ -97,8 +98,8 @@ String longestDistanceFlightString = "";
   textSize(20);
   text(standardDeviationString, 500, 350 );
   
-  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo );
-  displayFrequencyBarChart( flightDistanceFrequency );
+  int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo, 1000 );
+  displayFrequencyBarChart( flightDistanceFrequency, 1000 );
 
 
 
@@ -184,13 +185,13 @@ double getStandardDeviation( ArrayList flightsSet )
   
 }
 
-int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
+int[] getFlightDistanceFrequencyArray( ArrayList flightsSet, int bracket )
 {
   ArrayList <Flight> flights = flightsSet;
   int longestDistanceFlightIndex = getLongestDistanceFlightIndex( flights );
   int longestDistanceFlight = flights.get(longestDistanceFlightIndex).distanceTraveledMi;
   int flightDistanceBrackets = 0;
-  for ( int i = 0; i<longestDistanceFlight; i+=1000 )
+  for ( int i = 0; i<longestDistanceFlight; i+=bracket )
   {
     flightDistanceBrackets++;
   }
@@ -201,7 +202,7 @@ int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
   {
     for ( int a = 0; a<flightDistanceBrackets; a++ )
     {
-      if ( flights.get(i).distanceTraveledMi>=a*1000 && flights.get(i).distanceTraveledMi<(a+1)*1000 )
+      if ( flights.get(i).distanceTraveledMi>=a*bracket && flights.get(i).distanceTraveledMi<(a+1)*bracket )
       {
         flightFrequency[a]++;
       }
@@ -214,7 +215,7 @@ int[] getFlightDistanceFrequencyArray( ArrayList flightsSet )
   
 }
 
-void displayFrequencyBarChart( int[] flightFrequency )
+void displayFrequencyBarChart( int[] flightFrequency, int bracket  )
 {
   int mostFrequentBracketValueIndex = 0;
   int mostFrequentBracketValue = 0;
@@ -233,7 +234,10 @@ void displayFrequencyBarChart( int[] flightFrequency )
     float BAR_CHART_HEIGHT = BAR_CHART_MAX_HEIGHT*(((float)flightFrequency[i])/((float)mostFrequentBracketValue));
     
     
-    rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/3) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)), (BAR_CHART_BAR_LENGTH), (BAR_CHART_HEIGHT)) ;
+    rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)), (BAR_CHART_BAR_LENGTH), (BAR_CHART_HEIGHT)) ;
+    text( flightFrequency[i], ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), (( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT))+50));
+    println((SCREEN_Y/2+((float)((float)BAR_CHART_MAX_HEIGHT)*((float)((i)/flightFrequency.length))) ));/// Why only output less than 3 numbers ??
+    text( ((flightFrequency.length-i)*bracket), ((SCREEN_X/2) - (BAR_CHART_MARGIN)), (SCREEN_Y/2 + (BAR_CHART_MAX_HEIGHT)*((float)i/flightFrequency.length))) ;
     // println(i);
   }
 }
