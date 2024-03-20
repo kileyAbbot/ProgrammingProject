@@ -71,4 +71,30 @@ class Flight
     return flightDetails + "\n";
   }
   
+  String getDate()
+  {
+    return date;
+  }
+  
+  String getAirline()
+  {
+    return airline;
+  }
+  
+  String getOriginAirport()
+  {
+    return originAirport;
+  }
+  
+  String getOriginCity()
+  {
+    return originCity;
+  }
+  
+  String getOriginState()
+  {
+    return originState;
+  }
+  
+  
 }
