@@ -155,4 +155,94 @@ class Flight
   {
     return distanceTraveledMi;
   }
-}
+  
+  int getFlightMonth(Flight flightForDate)
+  {
+    String totalDate = flightForDate.getDate();
+    String updatedDate = "";
+    for(int i = 0; i < date.length(); i++)
+    {
+      if(date.charAt(i) != '/')
+      {
+        String holder = totalDate.substring(i);
+        updatedDate = updatedDate + holder;
+      }
+      else
+      {
+        break;
+      }
+    }
+    int month = Integer.valueOf(updatedDate);
+    return month;
+  }
+  
+  int getFlightDay(Flight flightForData)
+  {
+    String totalDate = flightForData.getDate();
+    String updatedDate = "";
+    int countOfDashes = 0;
+    for(int i = 0; i < date.length(); i++)
+    {
+      if(date.charAt(i) != '/' && countOfDashes == 1)
+      {
+        String holder = totalDate.substring(i);
+        updatedDate = updatedDate + holder;
+      }
+      else if(countOfDashes == 0)
+      {
+        countOfDashes++; 
+      }
+      else
+      {
+        break;
+      }
+    }
+    int day = Integer.valueOf(updatedDate);
+    return day;
+  }
+  
+  int getScheduledDepartureHour(Flight flightHour)
+  {
+    int hour = 0;
+    int time = flightHour.getScheduledDeparture();
+    if(time >= 1000)
+    {
+      hour = time / 100;
+    }
+    else if(time >= 100)
+    {
+      hour = time / 10;
+    }
+    else
+    {
+      hour = 0;
+    }
+  }
+  
+  
+  
+  
+  boolean flightCancelled(Flight flightCancel)
+  {
+    if(flightCancel.getIsCancelled() == 1)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  
+  boolean flightDiverted(Flight flightDiv)
+  {
+    if(flightDiv.getIsDiverted() == 1)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  
