@@ -37,10 +37,18 @@
             int lateness = actualArrival - scheduledArrival;
             if (lateness > 0)
             {
-              lateFlights.add(flight);             //doesn't actually sort by lateness yet, just identifies if flight is early
-            }
+              flight.setLateness(lateness);
+              lateFlights.add(flight);            
+              Collections.sort(lateflights, new Comparator<Flight>()        //site I found useful for understanding how to sort objects: https://stackoverflow.com/questions/18895915/how-to-sort-an-array-of-objects-in-java
+              {
+                public int compare (FLight flight1, Flight flight2)
+                {
+                  return Integer.compare(flight1.getLateness(), flight2.getLateness());
+                }
+              }); // ); to close the Collections.sort method
         }
         return lateFlights;
+    }
     }
             
         public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival) 
@@ -49,12 +57,19 @@
          for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList 
         {
             Flight flight = flights.get(i);
-            int earliness = scheduledArrival > actualArrival;
-            if ( earliness > 0)
+            int earliness = scheduledArrival - actualArrival;
+            if (earliness > 0)
             {
-              earlyFlights.add(flight);             //doesn't actually sort by earliness yet, just identifies if flight is early
-            }
+               flight.setEarliness(earliness);
+               earlyFlights.add(flight);            
+               Collections.sort(earlyflights, new Comparator<Flight>()        
+              {
+                public int compare (FLight flight1, Flight flight2)
+                {
+                  return Integer.compare(flight1.getEarliness(), flight2.getEarliness());
+                }
+              }); // ); to close the Collections.sort method
         }
         return earlyFlights;
     }
-            
+   
