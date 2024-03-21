@@ -217,6 +217,7 @@ class Flight
     {
       hour = 0;
     }
+    return hour;
   }
   
   
@@ -247,7 +248,7 @@ class Flight
   String decodeAirline(Flight plane)
   {
     String airline = plane.getAirline();
-    String fullAirline;
+    String fullAirline = "";
     if(airline.equals("AA"))
     {
       fullAirline = "American Airlines";
@@ -292,5 +293,6 @@ class Flight
     {
       fullAirline = "Delta Airlines";
     }
+    return fullAirline;
   }
   
