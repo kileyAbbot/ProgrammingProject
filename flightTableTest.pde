@@ -6,9 +6,18 @@ final int BAR_CHART_MARGIN = 50;
 final int BAR_CHART_BAR_LENGTH = 50; 
 final int BAR_CHART_MAX_HEIGHT = 400;
 final int BAR_CHART_HEIGHT = 500;
+
+
+
 void setup()
 {
   size(1920, 1080);
+  // /*
+    // Initialize buttons (positions may/can be adjusted later)  // (20/3) - Pratyaksh ( 43-45 ) 
+  test1 = new Button(50, 200, 150, 100, "test 1");
+  test2 = new Button(250, 200, 150, 100, "test 2");
+  test3 = new Button(450, 200, 150, 100, "test 3");
+  // */
   flightTable = loadTable("flights2kCSV.csv", "header");
   /*  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)*/
@@ -33,6 +42,45 @@ void setup()
 }
 void draw()
 {
+  // once code functional, start testing these 2 trials..
+  // INPUT SECTION:- END LINE:       // Pratyaksh (20/3)
+  // mouse function line: 
+  /*
+  background(0);                     // Clear screen
+  
+  if (screen == 0) {
+                     // Draw buttons on the main screen
+    test1.display();
+    test2.display();
+    test3.display();
+  } else if (screen == 1) {
+    background(255, 0, 0); // Red screen
+  } else if (screen == 2) {
+    background(0, 0, 255); // Blue screen
+  } else if (screen == 3) {
+    background(255, 255, 0); // Yellow screen
+  }
+  //////////////////////////////////////////////////////// 
+  boolean switchedRows = false;
+  int startingY = 0;
+  //background(0);
+  
+  background(0);                     // Clear screen
+  
+  if (screen == 0) {
+                     // Draw buttons on the main screen
+    test1.display();
+    test2.display();
+    test3.display();
+  } else if (screen == 1) {
+    background(255, 0, 0); // Red screen
+  } else if (screen == 2) {
+    background(0, 0, 255); // Blue screen
+  } else if (screen == 3) {
+    background(255, 255, 0); // Yellow screen
+  }
+  */
+  
   boolean switchedRows = false;
   int startingY = 0;
   background(0);
