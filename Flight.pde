@@ -295,4 +295,5 @@ class Flight
     }
     return fullAirline;
   }
+}
   
