@@ -42,7 +42,7 @@ void draw()
  // displayFrequencyBarChart( flightsInfo, 1000 );
  // displayBoxes();
  // displayDescriptiveStatistics( flightsInfo );
- displayLineChartNumberOfFlights( flightsInfo, 1, 31 );
+ displayLineChartNumberOfFlights( flightsInfo, 1, 10 );
 
 
 
@@ -386,32 +386,73 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, int startDay, int en
   int lineChartLength = (SCREEN_X-200)-(LINE_CHART_ORIGIN_X);
   int lineChartHeight = LINE_CHART_ORIGIN_Y-200;
   
-  textSize(20);
+  textSize(15);
   text("Dates", SCREEN_X/2, SCREEN_Y-50);
-  text("No. Flights", 60, SCREEN_Y/2 );
+  text("No. Flights", 20, SCREEN_Y/2 );
+  
+  
+  int freeSpaces = numberOfDaysConcerned-1;
+  double freeSpaceLength = lineChartLength/freeSpaces;
+  for ( int i = 0; i<numberOfDaysConcerned; i++ )
+  {
+   
+    String dateText = "" + (startDay+i) + " Jan";
+    textSize(15);
+    text(dateText, (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X), (float)(LINE_CHART_ORIGIN_Y+20) );
+    
+    for ( int a =0; a<airlinesConcerned.size(); a++ ) 
+    {
+      
+      
+      float yPositionOfPoint = (float)(getFrequencyAirlineParticularDay( flights, airlinesConcerned.get(a), a+startDay)/50)*(float)lineChartHeight;
+      println(a + "ay" + yPositionOfPoint );
+      float xPositionOfPoint = (float)((freeSpaceLength*i)+(float)LINE_CHART_ORIGIN_X);
+      println(a + "ax" + yPositionOfPoint );
+      circle( xPositionOfPoint, yPositionOfPoint, 20 );
+      if ( a != 0 )
+      {
+       
+        line( (float)(getFrequencyAirlineParticularDay( flights, airlinesConcerned.get(a-1), a+startDay)/50)*(float)lineChartHeight, (float)((freeSpaceLength*(i-1))+(float)LINE_CHART_ORIGIN_X), xPositionOfPoint, yPositionOfPoint );
+        
+      }
+      
+    }
+    
+  }
   
   for ( int i = 0; i<6; i++ )
   {
-   textSize(10);
-   text((i)*10, 80, LINE_CHART_ORIGIN_Y-((i/6)*lineChartHeight) );
-  }
-  
-   for ( int i = 0; i<numberOfDaysConcerned; i++ )
-   {
-     
-     
-     
-   }
+    
+    double a = (double)lineChartHeight/5;
+    double notchPlacement = (double)i*(double)a;
+    String frequencyText = "" + i*10;
+    textSize(15);
+    text(frequencyText, (float)(LINE_CHART_ORIGIN_X-20), (float)((float)LINE_CHART_ORIGIN_Y-(float)(notchPlacement)));
     
   }
+  
+
  
   
    
  }
+}
   
-void getFrequencyAirlineParticularDay()
+int getFrequencyAirlineParticularDay( ArrayList airlinesConcernedFlights, String airline, int day )
 {
+  ArrayList<Flight>flightsSet = new ArrayList<Flight>();
+  int frequency = 0;
+  for ( int i = 0; i<flightsSet.size(); i++ )
+  {
+    String airlineCode = flightsSet.get(i).airline;
+    int flightsSetDay = flightsSet.get(i).getFlightDay(flightsSet.get(i));
+    if ( airlineCode == airline && flightsSetDay == day )
+    {
+     frequency++; 
+    }
+  }
   
+  return frequency;
 }
   
   
