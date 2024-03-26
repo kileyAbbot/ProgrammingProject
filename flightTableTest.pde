@@ -1,4 +1,4 @@
-  Table flightTable;
+Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
@@ -53,9 +53,9 @@ void draw()
  
  displayLineChartNumberOfFlights( flightsInfo, flightAirlines, 1, 10 );
  
- drawLineChartPoint( 100, 400, 255, 0, 0 ); 
- drawLineChartPoint( 400, 100, 255, 0, 0 );
- drawLineChartLine( 100, 400, 400, 100, 255, 0, 0 ); 
+ drawLineChartPoint( 400, 100, 255, 0, 0 ); 
+ drawLineChartPoint( 100, 400, 255, 0, 0 );
+ drawLineChartLine( 400, 100, 100, 400, 255, 0, 0 ); 
 
 
 
@@ -380,10 +380,10 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
   for ( int i = 0; i<flightsAirlines.size(); i++ )
   {
     
-    airlinesConcernedColourRed.add((int)(((i+1)*19)%250));
-    airlinesConcernedColourGreen.add((int)(((i+1)*7)%250));
-    airlinesConcernedColourBlue.add((int)(((i+1)*9)%250));
-    
+    airlinesConcernedColourRed.add((int)(random(255)));
+    airlinesConcernedColourGreen.add((int)(random(255)));
+    airlinesConcernedColourBlue.add((int)(random(255)));
+    noLoop();
   }
   
   // line(x1,y1,x2,y2)
@@ -414,6 +414,10 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
     
     for ( int a = 0; a<flightsAirlines.size(); a++ )
     {
+      fill(airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
+      square(50 + a*50, 50, 20 ); 
+      textSize(20);
+      text( flightsAirlines.get(a), 70 + a*50, 50 );
      
      if ( a == 0 )
      {
@@ -511,7 +515,8 @@ void drawLineChartPoint( float xpos, float ypos, int redness, int greeness, int 
 void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int redness, int greeness, int blueness )
 {
   fill( redness, greeness, blueness );
-  quad(xpos1-2.5, ypos1, xpos1+2.5, ypos1, xpos2-2.5, ypos2, xpos2+2.5, ypos2 );
+  quad(xpos1-2.5, ypos1, xpos1+2.5, ypos1, xpos2+2.5, ypos2, xpos2-2.5, ypos2);
   
 }
+  
   
