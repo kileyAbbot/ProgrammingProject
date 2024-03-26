@@ -32,6 +32,8 @@ void setup()
   {
     println("Number of flights in " + i*1000 + "-" + (i+1)*1000 + " miles bracket : " + flightDistanceFrequency[i]); 
   }
+  
+  println( getFrequencyAirlineParticularDay(flightsInfo, "AA", 1 ));
 }
 void draw()
 {
@@ -40,9 +42,20 @@ void draw()
  
   
  // displayFrequencyBarChart( flightsInfo, 1000 );
+ 
  // displayBoxes();
+ 
  // displayDescriptiveStatistics( flightsInfo );
- displayLineChartNumberOfFlights( flightsInfo, 1, 10 );
+ 
+ ArrayList <String> flightAirlines = new ArrayList<String>();
+ flightAirlines.add("AS");
+ flightAirlines.add("AA");
+ 
+ displayLineChartNumberOfFlights( flightsInfo, flightAirlines, 1, 10 );
+ 
+ drawLineChartPoint( 100, 400, 255, 0, 0 ); 
+ drawLineChartPoint( 400, 100, 255, 0, 0 );
+ drawLineChartLine( 100, 400, 400, 100, 255, 0, 0 ); 
 
 
 
@@ -248,7 +261,7 @@ void displayFrequencyBarChart( ArrayList flightsSet, int bracket  )
   {
     float BAR_CHART_HEIGHT = BAR_CHART_MAX_HEIGHT*(((float)flightFrequency[i])/((float)mostFrequentBracketValue));
     
-    
+    fill(0);
     rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)), (BAR_CHART_BAR_LENGTH), (BAR_CHART_HEIGHT)) ;
     textSize(10);
     text( (((i)*bracket))+"-"+((i+1)*bracket), ((SCREEN_X/2) + (i*100)), (( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT))+50));
@@ -340,10 +353,15 @@ void displayBoxes()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// LINE CHART 
 
-void displayLineChartNumberOfFlights( ArrayList flightsSet, int startDay, int endDay )
+void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAirlinesConcerned, int startDay, int endDay )
 {
 
-  ArrayList <Flight> flights = new ArrayList<Flight>();
+  // 348 - 365 : Check whether valid date range 
+  
+ ArrayList <Flight> flights = new ArrayList<Flight>();
+ ArrayList <String> flightsAirlines = new ArrayList<String>();
+ flightsAirlines = flightsAirlinesConcerned;
+ flights = flightsSet;
  int numberOfDaysConcerned = ( endDay - startDay ) + 1;
  if ( numberOfDaysConcerned < 2 ) 
  {
@@ -354,38 +372,30 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, int startDay, int en
  else
  {
    
-  ArrayList <String> airlinesConcerned = new ArrayList<String>();
-  for ( int i = 0; i<flights.size(); i++ )
-  {
-    String airline = flights.get(i).airline;
-    for ( int a = 0; a<airlinesConcerned.size(); a++ )
-    {
-      if ( airline != airlinesConcerned.get(a) )
-      {
-        airlinesConcerned.add(airline);
-      }
-    }
-  }
+   // 370 - 380 : Get colours for different lines
   
   ArrayList <Integer> airlinesConcernedColourRed = new ArrayList<Integer>();
   ArrayList <Integer> airlinesConcernedColourGreen = new ArrayList<Integer>();
   ArrayList <Integer> airlinesConcernedColourBlue = new ArrayList<Integer>();
-  for ( int i = 0; i<airlinesConcerned.size(); i++ )
+  for ( int i = 0; i<flightsAirlines.size(); i++ )
   {
     
-    airlinesConcernedColourRed.add((int)random(255));
-    airlinesConcernedColourGreen.add((int)random(255));
-    airlinesConcernedColourBlue.add((int)random(255));
+    airlinesConcernedColourRed.add(((int)(i*35)%250));
+    airlinesConcernedColourGreen.add(((int)(i*17)%250));
+    airlinesConcernedColourBlue.add(((int)(i*23)%250));
     
   }
   
   // line(x1,y1,x2,y2)
   // ( 100, 980 ) 
+  // 386 - 393 : Line chart border lines & y-axis + x-axis labels 
+  
   line( LINE_CHART_ORIGIN_X, LINE_CHART_ORIGIN_Y, LINE_CHART_ORIGIN_X, 200 );           // y axis 
   line( LINE_CHART_ORIGIN_X, LINE_CHART_ORIGIN_Y, SCREEN_X-200, LINE_CHART_ORIGIN_Y );  // x axis
   int lineChartLength = (SCREEN_X-200)-(LINE_CHART_ORIGIN_X);
   int lineChartHeight = LINE_CHART_ORIGIN_Y-200;
   
+  fill(255);
   textSize(15);
   text("Dates", SCREEN_X/2, SCREEN_Y-50);
   text("No. Flights", 20, SCREEN_Y/2 );
@@ -396,33 +406,29 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, int startDay, int en
   for ( int i = 0; i<numberOfDaysConcerned; i++ )
   {
    
+    fill(255);
     String dateText = "" + (startDay+i) + " Jan";
     textSize(15);
     text(dateText, (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X), (float)(LINE_CHART_ORIGIN_Y+20) );
     
-    for ( int a =0; a<airlinesConcerned.size(); a++ ) 
+    
+    for ( int a = 0; a<flightsAirlines.size(); a++ )
     {
-      
-      
-      float yPositionOfPoint = (float)(getFrequencyAirlineParticularDay( flights, airlinesConcerned.get(a), a+startDay)/50)*(float)lineChartHeight;
-      println(a + "ay" + yPositionOfPoint );
-      float xPositionOfPoint = (float)((freeSpaceLength*i)+(float)LINE_CHART_ORIGIN_X);
-      println(a + "ax" + yPositionOfPoint );
-      circle( xPositionOfPoint, yPositionOfPoint, 20 );
-      if ( a != 0 )
-      {
-       
-        line( (float)(getFrequencyAirlineParticularDay( flights, airlinesConcerned.get(a-1), a+startDay)/50)*(float)lineChartHeight, (float)((freeSpaceLength*(i-1))+(float)LINE_CHART_ORIGIN_X), xPositionOfPoint, yPositionOfPoint );
-        
-      }
+     
+     
       
     }
+    
+    
+    
+    
+  
     
   }
   
   for ( int i = 0; i<6; i++ )
   {
-    
+    fill(255);
     double a = (double)lineChartHeight/5;
     double notchPlacement = (double)i*(double)a;
     String frequencyText = "" + i*10;
@@ -440,20 +446,55 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, int startDay, int en
   
 int getFrequencyAirlineParticularDay( ArrayList airlinesConcernedFlights, String airline, int day )
 {
+  
   ArrayList<Flight>flightsSet = new ArrayList<Flight>();
+  flightsSet = airlinesConcernedFlights;
+  int frequency = 0;
+  for ( int i = 0; i<flightsSet.size(); i++ )
+  {
+    String flightAirline = flightsSet.get(i).airline;
+    String flightDate = "" + day + "01/2022 00:00";
+   
+    if ( flightAirline==airline && flightsSet.get(i).date==flightDate )
+    {
+     frequency++; 
+    }
+    
+  }
+  
+  return frequency;
+  
+  /*
+  ArrayList<Flight>flightsSet = new ArrayList<Flight>();
+  flightsSet = airlinesConcernedFlights;
   int frequency = 0;
   for ( int i = 0; i<flightsSet.size(); i++ )
   {
     String airlineCode = flightsSet.get(i).airline;
-    int flightsSetDay = flightsSet.get(i).getFlightDay(flightsSet.get(i));
-    if ( airlineCode == airline && flightsSetDay == day )
+    String flightsSetDate = flightsSet.get(i).getDate();
+    if ( airlineCode == airline && flightsSetDate == "" + day + "01/2022 00:00" )
     {
      frequency++; 
     }
   }
   
   return frequency;
+  */
+ }
+
+void drawLineChartPoint( float xpos, float ypos, int redness, int greeness, int blueness )
+{
+  
+  fill( redness, greeness, blueness );
+  circle(xpos, ypos, 15);
+  
+}
+
+void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int redness, int greeness, int blueness )
+{
+  fill( redness, greeness, blueness );
+  quad(xpos1-2.5, ypos1, xpos1+2.5, ypos1, xpos2-2.5, ypos2, xpos2+2.5, ypos2 );
+  
 }
   
   
-    
