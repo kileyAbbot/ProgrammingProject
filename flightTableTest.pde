@@ -1,4 +1,4 @@
-Table flightTable;
+  Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
@@ -380,9 +380,9 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
   for ( int i = 0; i<flightsAirlines.size(); i++ )
   {
     
-    airlinesConcernedColourRed.add(((int)(i*35)%250));
-    airlinesConcernedColourGreen.add(((int)(i*17)%250));
-    airlinesConcernedColourBlue.add(((int)(i*23)%250));
+    airlinesConcernedColourRed.add((int)(((i+1)*19)%250));
+    airlinesConcernedColourGreen.add((int)(((i+1)*7)%250));
+    airlinesConcernedColourBlue.add((int)(((i+1)*9)%250));
     
   }
   
@@ -415,6 +415,24 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
     for ( int a = 0; a<flightsAirlines.size(); a++ )
     {
      
+     if ( a == 0 )
+     {
+       
+       float xpos = (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X);
+       float ypos = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/50);
+       drawLineChartPoint( xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
+       
+     }
+     
+     else
+     {
+       float xpos = (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X);
+       float ypos = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/50);
+       float xposPrevious = (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X);
+       float yposPrevious = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a-1), startDay+i)/50);
+       drawLineChartPoint( xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
+       drawLineChartLine( xposPrevious, yposPrevious, xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
+     }
      
       
     }
@@ -496,5 +514,4 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
   quad(xpos1-2.5, ypos1, xpos1+2.5, ypos1, xpos2-2.5, ypos2, xpos2+2.5, ypos2 );
   
 }
-  
   
