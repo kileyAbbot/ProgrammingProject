@@ -17,6 +17,8 @@ class Flight
   int isCancelled;
   int isDiverted;
   int distanceTraveledMi;
+  int lateness;
+  int earliness;
   
   Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)
@@ -38,6 +40,8 @@ class Flight
     this.isCancelled = isCancelled;
     this.isDiverted = isDiverted;
     this.distanceTraveledMi = distanceTraveledMi;
+    this.lateness = actualDeparture - scheduledDeparture;
+    this.earliness = scheduledDeparture - actualDeparture;
   }
   
   String printFlight()
