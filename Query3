@@ -3,8 +3,8 @@ public static class query
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////// THE BELOW METHOD SHOUULD BE IN DRAW (?)
  
-  /*
-public  void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
+/*
+public void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
     {
     fill(255);
     int y = 20; // Start drawing at y = 20
@@ -110,8 +110,38 @@ public  void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
       }
       return flightsWithinDistanceRange;
     }
-     
+
+
+public static int totalFlightsFromAirport( ArrayList<Flight> flights, String originAirport)
+{
+   ArrayList<Flight> FlightsFromAirport = query.getFlightsAssociatedWithOriginAirport(flights, originAirport);
+   int count = FlightsFromAirport.size();
+   return count;
 }
+
+public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight> flights1, ArrayList<Flight> flights2) 
+{
+    ArrayList<Flight> commonFlights = new ArrayList<>();
+    for (int i = 0; i < flights1.size(); i++) 
+    {
+        Flight flight1 = flights1.get(i);
+        for (int j = 0; j < flights2.size(); j++) 
+        {
+            Flight flight2 = flights2.get(j);
+            if (flight1.equals(flight2)) 
+            {
+                commonFlights.add(flight1);
+                j+= flights2.size();  // This is to break out of the second for loop as there is no point in keep searching after common flight is found
+            }
+        }
+    }
+    return commonFlights;
+}
+
+
+
+}
+        
 /*
        public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
     {
@@ -162,4 +192,4 @@ public  void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
     }
    
     */
-//   
+//     
