@@ -1,0 +1,195 @@
+public static class query
+{
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////// THE BELOW METHOD SHOUULD BE IN DRAW (?)
+ 
+/*
+public void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
+    {
+    fill(255);
+    int y = 20; // Start drawing at y = 20
+    int x = 10;
+    for (int i = 0; i < chosenArrayList.size(); i++)
+    {
+      text(chosenArrayList.get(i).printFlight(), x, y);
+      y += 200;
+      if (y >= 1010)
+      {
+        x += 120;
+        y -= 1000;
+      }
+    }
+  }
+   */
+   
+   public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, String originAirport)
+    {
+        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            if (flight.originAirport.equals(originAirport) )
+            {
+                flightsAssociatedWithAirport.add(flight);
+            }
+        }
+        return flightsAssociatedWithAirport;
+    }
+    
+       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, String destinationAirport)
+    {
+        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            if (flight.destinationAirport.equals(destinationAirport) )
+            {
+                flightsAssociatedWithAirport.add(flight);
+            }
+        }
+        return flightsAssociatedWithAirport;
+    }
+   
+ 
+   
+      public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, int startDate, int endDate)
+    {
+        ArrayList<Flight> flightsWithinDateRange = new ArrayList<>();   //initilizes array list
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          if ( flights.get(i).getFlightDay() >= startDate && flights.get(i).getFlightDay() <= endDate )
+          {
+            flightsWithinDateRange.add( flights.get(i) );
+          }
+        }
+       
+        return flightsWithinDateRange;
+     
+    }
+   
+     public static ArrayList<Flight> getCancelledFlights(ArrayList<Flight> flights)
+     {
+        ArrayList<Flight> cancelledFlights = new ArrayList<>();
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            if(flight.isCancelled == 1)
+            {;
+               cancelledFlights.add(flight);
+            }
+        }
+        return cancelledFlights;
+     }
+     
+     public static ArrayList<Flight> getDivertedFlights(ArrayList<Flight> flights)
+     {
+        ArrayList<Flight> divertedFlights = new ArrayList<>();
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            if(flight.isDiverted == 1)
+            {
+               divertedFlights.add(flight);
+            }
+        }
+        return divertedFlights;
+     }
+     
+         public  static ArrayList<Flight> getFlightsWithinDistanceRange( ArrayList<Flight> flights, int bracketLowerEnd, int bracketUpperEnd )
+    {
+     
+      ArrayList<Flight> flightsWithinDistanceRange = new ArrayList<Flight>();
+      for( int i = 0; i<flights.size(); i++ )
+      {
+       
+        if ( flights.get(i).distanceTraveledMi >= bracketLowerEnd && flights.get(i).distanceTraveledMi <= bracketUpperEnd )
+        {
+          flightsWithinDistanceRange.add(flights.get(i));
+        }
+       
+      }
+      return flightsWithinDistanceRange;
+    }
+
+
+public static int totalFlightsFromAirport( ArrayList<Flight> flights, String originAirport)
+{
+   ArrayList<Flight> FlightsFromAirport = query.getFlightsAssociatedWithOriginAirport(flights, originAirport);
+   int count = FlightsFromAirport.size();
+   return count;
+}
+
+public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight> flights1, ArrayList<Flight> flights2) 
+{
+    ArrayList<Flight> commonFlights = new ArrayList<>();
+    for (int i = 0; i < flights1.size(); i++) 
+    {
+        Flight flight1 = flights1.get(i);
+        for (int j = 0; j < flights2.size(); j++) 
+        {
+            Flight flight2 = flights2.get(j);
+            if (flight1.equals(flight2)) 
+            {
+                commonFlights.add(flight1);
+                j+= flights2.size();  // This is to break out of the second for loop as there is no point in keep searching after common flight is found
+            }
+        }
+    }
+    return commonFlights;
+}
+
+
+
+}
+        
+/*
+       public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
+    {
+        ArrayList<Flight> lateFlights = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            int lateness = actualArrival - scheduledArrival;
+            if (lateness > 0)
+            {
+              flight.setLateness(lateness);
+              lateFlights.add(flight);            
+              Collections.sort(lateflights, new Comparator<Flight>()        //site I found useful for understanding how to sort objects: https://stackoverflow.com/questions/18895915/how-to-sort-an-array-of-objects-in-java
+              {
+                public int compare (FLight flight1, Flight flight2)
+                {
+                  return Integer.compare(flight1.getLateness(), flight2.getLateness());
+                }
+              }); // ); to close the Collections.sort method
+        }
+        return lateFlights;
+    }
+    }
+           
+           
+           
+        public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
+    {
+        ArrayList<Flight> earlyFlights = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            int earliness = scheduledArrival - actualArrival;
+            if (earliness > 0)
+            {
+               flight.setEarliness(earliness);
+               earlyFlights.add(flight);            
+               Collections.sort(earlyflights, new Comparator<Flight>()        
+              {
+                public int compare (FLight flight1, Flight flight2)
+                {
+                  return Integer.compare(flight1.getEarliness(), flight2.getEarliness());
+                }
+              }); // ); to close the Collections.sort method
+        }
+        return earlyFlights;
+        }
+    }
+   
+    */
+//     

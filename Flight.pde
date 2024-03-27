@@ -176,29 +176,26 @@ class Flight
     return month;
   }
   
-  int getFlightDay(Flight flightForData)
+ int getFlightDay()
   {
-    String totalDate = flightForData.getDate();
-    String updatedDate = "";
-    int countOfDashes = 0;
-    for(int i = 0; i < date.length(); i++)
+
+    String dayString = "";
+    int charNumber = 0; 
+    
+    while ( this.date.charAt(charNumber) != '/' )
     {
-      if(date.charAt(i) != '/' && countOfDashes == 1)
-      {
-        String holder = totalDate.substring(i);
-        updatedDate = updatedDate + holder;
-      }
-      else if(countOfDashes == 0)
-      {
-        countOfDashes++; 
-      }
-      else
-      {
-        break;
-      }
+      charNumber++;
     }
-    int day = Integer.valueOf(updatedDate);
+    charNumber++;
+    
+    while ( this.date.charAt(charNumber) != '/' )
+    {
+      dayString+=this.date.charAt(charNumber++);
+    }
+    
+    int day = Integer.parseInt(dayString);
     return day;
+    
   }
   
   int getScheduledDepartureHour(Flight flightHour)
