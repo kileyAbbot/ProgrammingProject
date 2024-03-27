@@ -1,0 +1,111 @@
+public class mathStats
+{
+  
+ int getLongestDistanceFlightIndex( ArrayList flightsSet )
+{
+  
+  ArrayList <Flight> flights = flightsSet;
+  int distance = 0;
+  int flightInfo = 0;
+ 
+  for ( int i = 0; i<flights.size(); i++ ) 
+  {
+    if ( flights.get(i).distanceTraveledMi > distance )
+    {
+      distance = flights.get(i).distanceTraveledMi;
+      flightInfo = i;
+    }
+  }
+  
+  return flightInfo;
+}
+
+int getShortestDistanceFlightIndex( ArrayList flightsSet )
+{
+  ArrayList <Flight> flights = flightsSet;
+  int distance = flights.get(0).distanceTraveledMi;
+  int flightInfo = 0;
+ 
+  for ( int i = 0; i<flights.size(); i++ ) 
+  {
+    if ( flights.get(i).distanceTraveledMi < distance )
+    {
+      distance = flights.get(i).distanceTraveledMi;
+      flightInfo = i;
+    }
+  }
+  
+  return flightInfo;
+}
+
+double getAverageFlightDistance( ArrayList flightsSet )
+{
+  
+  ArrayList <Flight> flights = flightsSet;
+  double total = 0;
+ 
+  for ( int i = 0; i<flights.size(); i++ )
+  {
+    int distance  = flights.get(i).distanceTraveledMi;
+    total+=(double)distance;
+  }
+  
+  double average = total/flightsInfo.size();
+  return average;
+  
+}
+
+int getRangeDistance( ArrayList flightsSet )
+{
+  ArrayList <Flight> flights = flightsSet;
+  int longestDistanceFlightIndex = getLongestDistanceFlightIndex( flights );
+  int shortestDistanceFlightIndex = getShortestDistanceFlightIndex( flights );
+  int range = flights.get(longestDistanceFlightIndex).distanceTraveledMi - flights.get(shortestDistanceFlightIndex).distanceTraveledMi;
+  return range;
+}
+
+double getStandardDeviation( ArrayList flightsSet )
+{
+  ArrayList <Flight> flights = flightsSet;
+  double average = getAverageFlightDistance( flights );
+  double sumOfSquaredDifferences = 0.0; 
+  for ( int i = 0; i<flights.size(); i++)
+  {
+   double difference=(flights.get(i).distanceTraveledMi-average);
+   sumOfSquaredDifferences+=Math.pow(difference,2);
+  }
+  
+  double variance = sumOfSquaredDifferences/(flights.size()-1);
+  double standardDeviation = Math.sqrt(variance);
+  return standardDeviation;
+  
+}
+
+
+int getIntVariableInQuestion ( Flight flight, String variable )
+{
+  
+  if ( variable == "DistanceTravelledMiles" )
+  {
+   return flight.distanceTraveledMi;
+  }
+  
+  if ( variable == "DurationMinutes" ) 
+  {
+    /// Need method in flight for getting the duration in minutes of the flight 
+   return 0; 
+  }
+  
+  if ( variable == "Lateness" ) 
+  {
+    return 0;
+  }
+  
+  else 
+  {
+   return 0; 
+  }
+
+}
+  
+}
