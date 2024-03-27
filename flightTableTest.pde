@@ -40,6 +40,12 @@ void draw()
   background(120);
   textSize(8);
  
+  
+  /* Kiley -- Testing airport class & how it draws)
+  Airport dulles = new Airport("Dulles International - VA");
+  dulles.draw();
+  */
+ 
  ////////// USING QUERIES LINES 45-62 
  
  
