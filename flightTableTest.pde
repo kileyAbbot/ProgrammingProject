@@ -40,27 +40,29 @@ void draw()
   background(120);
   textSize(8);
  
-  int distanceLowerBracket = 2000;
-  int distanceUpperBracket = 4000;
-  int startDay = 1; 
-  int endDay = 10; 
-  ArrayList <String> flightAirports = new ArrayList<String>();
-  flightAirports.add("LAX");
-  flightAirports.add("JAX");
+ ////////// USING QUERIES LINES 45-62 
+ 
+ 
+  try
+  {
+  int distanceLowerBracket = 0;
+  int distanceUpperBracket = 6000;
+  int startDay = 3; 
+  int endDay = 7; 
+  ArrayList <String> flightOriginAirports = new ArrayList<String>();
+  flightOriginAirports.add("LAX");
+  flightOriginAirports.add("JFK");
+  flightOriginAirports.add("JAX");
+
   
   
   ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
   flightsSorted = query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
   flightsSorted = query.getFlightsWithinDateRange( flightsSorted, startDay, endDay );
-  /*
-  for ( int i = 0; i<flightAirports.size(); i++ )
-  {
-  flightsSorted = query.getFlightsAssociatedWithOriginAirport ( flightsSorted, flightAirports.get(i) );
-  }
-  */
-  
+  flightsSorted = query.getFlightsAssociatedWithOriginAirport( flightsSorted, flightOriginAirports );
+
   textSize(25);
-  text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range, from day " + startDay + " to " + endDay + " concering airports : " + flightAirports, 10, 25 );
+  text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range, from day " + startDay + " to " + endDay + " concering airports : " + flightOriginAirports, 10, 25 );
   
   
   displayFrequencyBarChart( flightsSorted, 1000 );
@@ -83,6 +85,12 @@ void draw()
  drawLineChartLine( 400, 100, 100, 400, 255, 0, 0 ); 
  */
 
+  }
+  catch (Exception e )
+  {
+    println("FATAL ERROR");
+  }
+  
 
 
 }
@@ -549,5 +557,3 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
 }
   
   
-     
-    
