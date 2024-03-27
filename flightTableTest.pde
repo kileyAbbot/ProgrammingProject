@@ -42,14 +42,26 @@ void draw()
  
   int distanceLowerBracket = 2000;
   int distanceUpperBracket = 4000;
-  
+  int startDay = 1; 
+  int endDay = 10; 
+  ArrayList <String> flightAirports = new ArrayList<String>();
+  flightAirports.add("LAX");
+  flightAirports.add("JAX");
   
   
   ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
   flightsSorted = query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
+  flightsSorted = query.getFlightsWithinDateRange( flightsSorted, startDay, endDay );
+  /*
+  for ( int i = 0; i<flightAirports.size(); i++ )
+  {
+  flightsSorted = query.getFlightsAssociatedWithOriginAirport ( flightsSorted, flightAirports.get(i) );
+  }
+  */
   
   textSize(25);
-  text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range ", 25, 100 ); 
+  text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range, from day " + startDay + " to " + endDay + " concering airports : " + flightAirports, 10, 25 );
+  
   
   displayFrequencyBarChart( flightsSorted, 1000 );
   println( flightsInfo.get(6).getFlightDay() ); 
