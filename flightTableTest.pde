@@ -40,13 +40,26 @@ void draw()
   background(120);
   textSize(8);
  
+  int distanceLowerBracket = 2000;
+  int distanceUpperBracket = 4000;
   
- // displayFrequencyBarChart( flightsInfo, 1000 );
+  
+  
+  ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
+  flightsSorted = Query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
+  
+  textSize(25);
+  text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range ", 25, 100 ); 
+  
+  displayFrequencyBarChart( flightsSorted, 1000 );
+  println( flightsInfo.get(6).getFlightDay() ); 
  
  // displayBoxes();
  
- // displayDescriptiveStatistics( flightsInfo );
+  displayDescriptiveStatistics( flightsSorted );
  
+ 
+ /*
  ArrayList <String> flightAirlines = new ArrayList<String>();
  flightAirlines.add("AS");
  flightAirlines.add("AA");
@@ -56,6 +69,7 @@ void draw()
  drawLineChartPoint( 400, 100, 255, 0, 0 ); 
  drawLineChartPoint( 100, 400, 255, 0, 0 );
  drawLineChartLine( 400, 100, 100, 400, 255, 0, 0 ); 
+ */
 
 
 
@@ -261,13 +275,16 @@ void displayFrequencyBarChart( ArrayList flightsSet, int bracket  )
   {
     float BAR_CHART_HEIGHT = BAR_CHART_MAX_HEIGHT*(((float)flightFrequency[i])/((float)mostFrequentBracketValue));
     
+    if ( flightFrequency[i] > 0 )
+    {
     fill(0);
     rect( ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)), (BAR_CHART_BAR_LENGTH), (BAR_CHART_HEIGHT)) ;
     textSize(10);
     text( (((i)*bracket))+"-"+((i+1)*bracket), ((SCREEN_X/2) + (i*100)), (( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT))+50));
-    println((SCREEN_Y/2+((float)((float)BAR_CHART_MAX_HEIGHT)*((float)((i)/flightFrequency.length))) ));/// Why only output less than 3 numbers ??
+    // println((SCREEN_Y/2+((float)((float)BAR_CHART_MAX_HEIGHT)*((float)((i)/flightFrequency.length))) ));/// Why only output less than 3 numbers ??
     text(   flightFrequency[i], ((SCREEN_X/2) + (i*(BAR_CHART_BAR_LENGTH+BAR_CHART_MARGIN) )), ( (SCREEN_Y/2) + (BAR_CHART_MAX_HEIGHT-BAR_CHART_HEIGHT)) - 50 ) ;
-    println("Actual departure : " + flightsInfo.get(i).getActualDeparture() + "Actual arrival : " + flightsInfo.get(i).getActualArrival());
+   // println("Actual departure : " + flightsInfo.get(i).getActualDeparture() + "Actual arrival : " + flightsInfo.get(i).getActualArrival());
+    }
   }
 }
 
@@ -380,10 +397,10 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
   for ( int i = 0; i<flightsAirlines.size(); i++ )
   {
     
-    airlinesConcernedColourRed.add((int)(random(255)));
-    airlinesConcernedColourGreen.add((int)(random(255)));
-    airlinesConcernedColourBlue.add((int)(random(255)));
-    noLoop();
+    airlinesConcernedColourRed.add(i*20);
+    airlinesConcernedColourGreen.add(i*10);
+    airlinesConcernedColourBlue.add(i*10);
+    
   }
   
   // line(x1,y1,x2,y2)
@@ -477,7 +494,7 @@ int getFrequencyAirlineParticularDay( ArrayList airlinesConcernedFlights, String
     String flightAirline = flightsSet.get(i).airline;
     String flightDate = "" + day + "01/2022 00:00";
    
-    if ( flightAirline==airline && flightsSet.get(i).date==flightDate )
+    if ( flightAirline.equals(airline) && flightsSet.get(i).date==flightDate )
     {
      frequency++; 
     }
@@ -520,3 +537,5 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
 }
   
   
+     
+    
