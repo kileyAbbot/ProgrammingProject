@@ -1,60 +1,58 @@
+import java.util.Collections;
+import java.util.Comparator;
+
 public static class query
 {
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////// THE BELOW METHOD SHOUULD BE IN DRAW (?)
- 
-/*
-public void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
-    {
-    fill(255);
-    int y = 20; // Start drawing at y = 20
-    int x = 10;
-    for (int i = 0; i < chosenArrayList.size(); i++)
-    {
-      text(chosenArrayList.get(i).printFlight(), x, y);
-      y += 200;
-      if (y >= 1010)
-      {
-        x += 120;
-        y -= 1000;
-      }
-    }
-  }
-   */
    
-   public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, String originAirport)
+  public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, ArrayList<String> originAirports)
     {
-        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
+        String flightAirport;
+        String flightAirportForComparison;
+        ArrayList<Flight> flightsAssociatedWithAirports = new ArrayList<>();
          for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
         {
-            Flight flight = flights.get(i);
-            if (flight.originAirport.equals(originAirport) )
+          for ( int a = 0; a < originAirports.size(); a++ )
+          {
+            flightAirport = flights.get(i).originAirport;
+            flightAirportForComparison = originAirports.get(a);
+            if ( flightAirport.equals(flightAirportForComparison) )
             {
-                flightsAssociatedWithAirport.add(flight);
+            //  println( flightAirport );
+              flightsAssociatedWithAirports.add(flights.get(i));
             }
+          }
+ 
         }
-        return flightsAssociatedWithAirport;
+        return flightsAssociatedWithAirports;
     }
     
-       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, String destinationAirport)
+       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, ArrayList<String> destinationAirports)
     {
-        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
+        String flightAirport;
+        String flightAirportForComparison;
+        ArrayList<Flight> flightsAssociatedWithAirports = new ArrayList<>();
          for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
         {
-            Flight flight = flights.get(i);
-            if (flight.destinationAirport.equals(destinationAirport) )
+          for ( int a = 0; a < destinationAirports.size(); a++ )
+          {
+            flightAirport = flights.get(i).destinationAirport;
+            flightAirportForComparison = destinationAirports.get(a);
+            if ( flightAirport.equals(flightAirportForComparison) )
             {
-                flightsAssociatedWithAirport.add(flight);
+             // println( flightAirport );
+              flightsAssociatedWithAirports.add(flights.get(i));
             }
+          }
+ 
         }
-        return flightsAssociatedWithAirport;
+        return flightsAssociatedWithAirports;
     }
    
  
    
       public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, int startDate, int endDate)
     {
-        ArrayList<Flight> flightsWithinDateRange = new ArrayList<>();   //initilizes array list
+        ArrayList<Flight> flightsWithinDateRange = new ArrayList<>();   
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
         {
           if ( flights.get(i).getFlightDay() >= startDate && flights.get(i).getFlightDay() <= endDate )
@@ -112,9 +110,9 @@ public void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
     }
 
 
-public static int totalFlightsFromAirport( ArrayList<Flight> flights, String originAirport)
+public static int getTotalFlightsFromAirport( ArrayList<Flight> flights, ArrayList<String> originAirports)
 {
-   ArrayList<Flight> FlightsFromAirport = query.getFlightsAssociatedWithOriginAirport(flights, originAirport);
+   ArrayList<Flight> FlightsFromAirport = query.getFlightsAssociatedWithOriginAirport(flights, originAirports);
    int count = FlightsFromAirport.size();
    return count;
 }
@@ -139,57 +137,52 @@ public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight
 }
 
 
-
+public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights) 
+{
+    ArrayList<Flight> lateFlights = new ArrayList<>();
+    for (int i = 0; i < flights.size(); i++) 
+    {
+        Flight flight = flights.get(i);
+        if (flights.get(i).lateness > 0) 
+        {
+          lateFlights.add(flight);
+        }
+    }
+    Collections.sort(lateFlights, new Comparator<Flight>() 
+    {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from most late to least late. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least late to most late
+            return Integer.compare( flight2.lateness, flight1.lateness);  
+        }
+    });
+    return lateFlights;
 }
-        
-/*
-       public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
+
+
+public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights) 
+{
+    ArrayList<Flight> earlyFlights = new ArrayList<>();
+    for (int i = 0; i < flights.size(); i++) 
     {
-        ArrayList<Flight> lateFlights = new ArrayList<>();
-         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        Flight flight = flights.get(i);
+        if (flights.get(i).earliness > 0) 
         {
-            Flight flight = flights.get(i);
-            int lateness = actualArrival - scheduledArrival;
-            if (lateness > 0)
-            {
-              flight.setLateness(lateness);
-              lateFlights.add(flight);            
-              Collections.sort(lateflights, new Comparator<Flight>()        //site I found useful for understanding how to sort objects: https://stackoverflow.com/questions/18895915/how-to-sort-an-array-of-objects-in-java
-              {
-                public int compare (FLight flight1, Flight flight2)
-                {
-                  return Integer.compare(flight1.getLateness(), flight2.getLateness());
-                }
-              }); // ); to close the Collections.sort method
+          earlyFlights.add(flight);
         }
-        return lateFlights;
     }
-    }
-           
-           
-           
-        public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
+    Collections.sort(earlyFlights, new Comparator<Flight>() 
     {
-        ArrayList<Flight> earlyFlights = new ArrayList<>();
-         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        public int compare(Flight flight1, Flight flight2) 
         {
-            Flight flight = flights.get(i);
-            int earliness = scheduledArrival - actualArrival;
-            if (earliness > 0)
-            {
-               flight.setEarliness(earliness);
-               earlyFlights.add(flight);            
-               Collections.sort(earlyflights, new Comparator<Flight>()        
-              {
-                public int compare (FLight flight1, Flight flight2)
-                {
-                  return Integer.compare(flight1.getEarliness(), flight2.getEarliness());
-                }
-              }); // ); to close the Collections.sort method
+          // currently sorts from most early to least early. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least early to most early
+            return Integer.compare( flight2.earliness, flight1.earliness);  
         }
-        return earlyFlights;
-        }
-    }
-   
-    */
-//     
+    });
+    return earlyFlights;
+}
+}
+
+ 
