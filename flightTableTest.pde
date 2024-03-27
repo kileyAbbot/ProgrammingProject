@@ -46,7 +46,7 @@ void draw()
   
   
   ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
-  flightsSorted = Query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
+  flightsSorted = query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
   
   textSize(25);
   text("FOR FLIGHTS WITHIN " + distanceLowerBracket + "-" + distanceUpperBracket + " range ", 25, 100 ); 
