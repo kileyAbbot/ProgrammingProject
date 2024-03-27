@@ -35,6 +35,20 @@ public  void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
         }
         return flightsAssociatedWithAirport;
     }
+    
+       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, String destinationAirport)
+    {
+        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+            Flight flight = flights.get(i);
+            if (flight.destinationAirport.equals(destinationAirport) )
+            {
+                flightsAssociatedWithAirport.add(flight);
+            }
+        }
+        return flightsAssociatedWithAirport;
+    }
    
  
    
@@ -94,65 +108,11 @@ public  void drawFlightDataAsText(ArrayList<Flight> chosenArrayList)
         }
        
       }
-     
       return flightsWithinDistanceRange;
-     
     }
      
 }
 /*
-
-public static class Query {
-   
-   public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, String startDate, String endDate)
-    {
-        ArrayList<Flight> flightsWithinDateRange = new ArrayList<>();   //initilizes array list
-        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
-        {
-            Flight flight = flights.get(i);
-            if (flight.date.compareTo(startDate) >= 0 && flight.date.compareTo(endDate) <= 0) // compares dates lexicographically (meaning by their characters to determine which string represents a numerically larger or smaller value
-            {
-                flightsWithinDateRange.add(flight);
-            }
-        }
-        return flightsWithinDateRange;
-    }
-
-   
-    public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, String originAirport)
-    {
-        ArrayList<Flight> flightsAssociatedWithAirport = new ArrayList<>();
-         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
-        {
-            Flight flight = flights.get(i);
-            if (flight.originAirport.equals(originAirport) )
-            {
-                flightsAssociatedWithAirport.add(flight);
-            }
-        }
-        return flightsAssociatedWithAirport;
-    }
-   
-    public static ArrayList<Flight> getFlightsWithinDistanceRange( ArrayList<Flight> flights, int bracketLowerEnd, int bracketUpperEnd )
-    {
-     
-      ArrayList<Flight> flightsWithinDistanceRange = new ArrayList<Flight>();
-      for( int i = 0; i<flights.size(); i++ )
-      {
-       
-        if ( flights.get(i).distanceTraveledMi >= bracketLowerEnd && flights.get(i).distanceTraveledMi <= bracketUpperEnd )
-        {
-          flightsWithinDistanceRange.add(flights.get(i));
-        }
-       
-      }
-     
-      return flightsWithinDistanceRange;
-     
-    }
-   
-    /*
-   
        public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights,  int scheduledArrival, int actualArrival)
     {
         ArrayList<Flight> lateFlights = new ArrayList<>();
@@ -202,4 +162,4 @@ public static class Query {
     }
    
     */
-//
+//   
