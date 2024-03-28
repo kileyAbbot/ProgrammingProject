@@ -1,3 +1,4 @@
+import java.util.Scanner;
 Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
 final int SCREEN_X = 1920;
@@ -15,12 +16,13 @@ ArrayList<Button> graphButtons = new ArrayList<Button>();
 
 void setup()
 {
-  size(1280, 800);
+  size(1920, 1080);
   
   // Initialize buttons // added by pratyaksh
   backButton = new Button("Back", width - 110, 20, 100, 50);
   graphButtons.add(new Button("Bar Graph", width/2 - 150, 100, 300, 50));
   graphButtons.add(new Button("Line Chart", width/2 - 150, 200, 300, 50));
+  graphButtons.add(new Button("Descriptive Statistics", width/2 - 150, 300, 300, 50));
   // Add other buttons as needed
   
   flightTable = loadTable("flights2kCSV.csv", "header");
@@ -123,17 +125,21 @@ void draw()
 
  ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
  
-  try
-  {
+    
   int distanceLowerBracket = 0;
   int distanceUpperBracket = 6000;
-  int startDay = 3; 
-  int endDay = 7; 
+  int startDay = 1;
+  int endDay = 5;
+  
   ArrayList <String> flightOriginAirports = new ArrayList<String>();
   flightOriginAirports.add("LAX");
-  flightOriginAirports.add("JFK");
   flightOriginAirports.add("JAX");
-
+  flightOriginAirports.add("JFK");
+  try
+  {
+    
+   
+ 
   
   
   
@@ -156,7 +162,7 @@ void draw()
  
  // displayBoxes();
  
- // displayDescriptiveStatistics( flightsSorted );
+ 
  
  
  ArrayList <String> flightAirlines = new ArrayList<String>();
@@ -167,7 +173,7 @@ void draw()
  flightAirlines.add("G4");
  flightAirlines.add("WN");
  
- displayLineChartNumberOfFlights( flightsInfo, flightAirlines, 1, 6 );
+
  
  // Clear the screen with a black background when showing buttons
   if (screenState == 0) { // 173 - 191: added by pratyaksh
@@ -185,12 +191,20 @@ void draw()
   else if (screenState == 2) {
     clear(); // Clear the previous screen
     background(120); // Set the background for the line chart
-    displayLineChartNumberOfFlights(flightsInfo, flightAirlines, 1, 6);
+    displayLineChartNumberOfFlights(flightsInfo, flightAirlines, startDay, endDay);
     backButton.display();
   }
+   else if (screenState == 3) {
+    clear(); // Clear the previous screen
+    background(120); // Set the background for the line chart
+    displayDescriptiveStatistics( flightsSorted );
+    backButton.display();
+  }
+   } 
+ 
   // Add cases for other graphs and clear the screen similarly
  
-}
+
 
 
 
