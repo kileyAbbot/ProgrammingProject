@@ -7,6 +7,7 @@ Still a work in progress will work on this more just figured i'd comment it out
  create list of arrival flights
  incorporate some kind of statistic/description of late arrivals in comparison to other airports (lateness on departure is what is necessary for late statistics)
  */
+ /*
 String airportName;
 Flight[] departingFlightsArray;
 ArrayList<Flight> arrivalFlights = new ArrayList<Flight>();
@@ -43,7 +44,7 @@ class Airport
   
 }  
 
-
+*/
 
   
  /* void draw()

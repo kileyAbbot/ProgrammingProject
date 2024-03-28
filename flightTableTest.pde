@@ -8,9 +8,21 @@ final int BAR_CHART_MAX_HEIGHT = 400;
 final int BAR_CHART_HEIGHT = 500;
 final int LINE_CHART_ORIGIN_X = 100;
 final int LINE_CHART_ORIGIN_Y = SCREEN_Y-100; // 980
+
+int screenState = 0; // 0 for default screen with buttons, 1 for bar chart, etc.
+Button backButton;
+ArrayList<Button> graphButtons = new ArrayList<Button>();
+
 void setup()
 {
   size(1280, 800);
+  
+  // Initialize buttons // added by pratyaksh
+  backButton = new Button("Back", width - 110, 20, 100, 50);
+  graphButtons.add(new Button("Bar Graph", width/2 - 150, 100, 300, 50));
+  graphButtons.add(new Button("Line Chart", width/2 - 150, 200, 300, 50));
+  // Add other buttons as needed
+  
   flightTable = loadTable("flights2kCSV.csv", "header");
   /*  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)*/
@@ -157,10 +169,27 @@ void draw()
  
  displayLineChartNumberOfFlights( flightsInfo, flightAirlines, 1, 6 );
  
-
-  
-
-
+ // Clear the screen with a black background when showing buttons
+  if (screenState == 0) { // 173 - 191: added by pratyaksh
+    background(0); // Set background to black
+    for (Button button : graphButtons) {
+      button.display();
+    }
+  } 
+  else if (screenState == 1) {
+    clear(); // Clear the previous screen
+    background(120); // Set the background for the bar chart
+    displayFrequencyBarChart(flightsSorted, 1000);
+    backButton.display();
+  } 
+  else if (screenState == 2) {
+    clear(); // Clear the previous screen
+    background(120); // Set the background for the line chart
+    displayLineChartNumberOfFlights(flightsInfo, flightAirlines, 1, 6);
+    backButton.display();
+  }
+  // Add cases for other graphs and clear the screen similarly
+ 
 }
 
 
@@ -650,4 +679,47 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
   line(xpos1, ypos1, xpos2, ypos2);
  
  
+}
+
+void mousePressed() { // added by pratyaksh. 
+  if (screenState == 0) {
+    for (int i = 0; i < graphButtons.size(); i++) {
+      if (graphButtons.get(i).isClicked(mouseX, mouseY)) {
+        clear(); // Clear the screen before drawing the graph
+        screenState = i + 1; // Assuming order matches the state
+        return;
+      }
+    }
+  } else {
+    if (backButton.isClicked(mouseX, mouseY)) {
+      clear(); // Clear the graph before going back to the buttons
+      screenState = 0;
+    }
+  }
+}
+
+class Button { // added by pratyaksh
+  String text;
+  int x, y, w, h;
+
+  Button(String text, int x, int y, int w, int h) {
+    this.text = text;
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  void display() { // added by pratyaksh
+    fill(255, 255, 0); // Yellow fill
+    stroke(0); // Black border
+    rect(x, y, w, h, 5); // Slightly rounded corners for aesthetics
+    fill(0); // Black text
+    textAlign(CENTER, CENTER);
+    text(text, x + w/2, y + h/2);
+  }
+
+  boolean isClicked(int mouseX, int mouseY) { // added by pratyaksh
+    return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;
+  }
 }
