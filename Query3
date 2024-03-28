@@ -1,5 +1,7 @@
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public static class query
 {
@@ -60,10 +62,54 @@ public static class query
             flightsWithinDateRange.add( flights.get(i) );
           }
         }
-       
         return flightsWithinDateRange;
-     
     }
+    
+         public static ArrayList<Flight> getFlightsWithinActualTimeRange(ArrayList<Flight> flights, int startTime, int endTime)
+    {
+        ArrayList<Flight> flightsWithinTimeRange = new ArrayList<>();   
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          if ( flights.get(i).actualDeparture >= startTime && flights.get(i).actualDeparture <= endTime )
+          {
+            flightsWithinTimeRange.add( flights.get(i) );
+          }
+        }
+            Collections.sort(flightsWithinTimeRange, new Comparator<Flight>() 
+        {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from earliest time to latest time. Switching to "( flight2.actualDeparture, flight1.actualDeparture)"
+          // will sort from latest time to earliest time
+            return Integer.compare( flight1.actualDeparture, flight2.actualDeparture);  
+        }
+    }); 
+        return flightsWithinTimeRange;
+    }
+    
+       public static ArrayList<Flight> getFlightsWithinScheduledTimeRange(ArrayList<Flight> flights, int startTime, int endTime)
+    {
+        ArrayList<Flight> flightsWithinTimeRange = new ArrayList<>();   
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          if ( flights.get(i).scheduledDeparture >= startTime && flights.get(i).scheduledDeparture <= endTime )
+          {
+            flightsWithinTimeRange.add( flights.get(i) );
+          }
+        }
+            Collections.sort(flightsWithinTimeRange, new Comparator<Flight>() 
+        {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from earliest time to latest time. Switching to "( flight2.scheduledDeparture, flight1.scheduledDeparture)"
+          // will sort from latest time to earliest time
+            return Integer.compare( flight1.scheduledDeparture, flight2.scheduledDeparture);  
+        }
+    }); 
+        return flightsWithinTimeRange;
+    }
+    
+    
    
      public static ArrayList<Flight> getCancelledFlights(ArrayList<Flight> flights)
      {
@@ -72,7 +118,7 @@ public static class query
         {
             Flight flight = flights.get(i);
             if(flight.isCancelled == 1)
-            {;
+            {
                cancelledFlights.add(flight);
             }
         }
@@ -99,16 +145,34 @@ public static class query
       ArrayList<Flight> flightsWithinDistanceRange = new ArrayList<Flight>();
       for( int i = 0; i<flights.size(); i++ )
       {
-       
+        Flight flight = flights.get(i);
         if ( flights.get(i).distanceTraveledMi >= bracketLowerEnd && flights.get(i).distanceTraveledMi <= bracketUpperEnd )
         {
-          flightsWithinDistanceRange.add(flights.get(i));
+          flightsWithinDistanceRange.add(flight);
         }
-       
       }
-      return flightsWithinDistanceRange;
+        Collections.sort(flightsWithinDistanceRange, new Comparator<Flight>() 
+        {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from most late to least late. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least late to most late
+            return Integer.compare( flight2.distanceTraveledMi, flight1.distanceTraveledMi);  
+        }
+    }); 
+    return flightsWithinDistanceRange;
     }
 
+public static ArrayList<String> getAllAirports(ArrayList<Flight> flights) 
+{
+    Set<String> airportSet = new HashSet<>();     // Use a HashSet to prevent adding duplicates. 
+    for (Flight flight : flights) 
+    { 
+        airportSet.add(flight.getOriginAirport());
+        airportSet.add(flight.getDestinationAirport());
+    }
+    return new ArrayList<>(airportSet);
+}
 
 public static int getTotalFlightsFromAirport( ArrayList<Flight> flights, ArrayList<String> originAirports)
 {
@@ -135,6 +199,46 @@ public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight
     }
     return commonFlights;
 }
+
+public static ArrayList<Flight> sortQuickestFlights(ArrayList<Flight> flights) 
+{
+    ArrayList<Flight> quickestFlights = new ArrayList<>();
+    for (int i = 0; i < flights.size(); i++) 
+    {
+      if ( flights.get(i).isCancelled != 1)
+      {
+        Flight flight = flights.get(i);
+        quickestFlights.add(flight);
+      }
+    }
+    Collections.sort(quickestFlights, new Comparator<Flight>() 
+    {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+            return Integer.compare( flight2.actualTimeTaken, flight1.actualTimeTaken);  
+        }
+    });
+    return quickestFlights;
+}
+
+public static ArrayList<Flight> getQuickestFlightsWithinRange(ArrayList<Flight> flights, int minTime, int maxTime) 
+{
+    ArrayList<Flight> FlightsWithinRange = new ArrayList<>();
+    for (int i = 0; i < flights.size(); i++) 
+    {
+      Flight flight = flights.get(i);
+    if ( flights.get(i).actualTimeTaken >= minTime && flights.get(i).actualTimeTaken <= maxTime 
+    && flights.get(i).isCancelled == 0)
+      {
+        FlightsWithinRange.add(flight);
+      }
+    }
+   ArrayList<Flight> Flights = sortQuickestFlights(FlightsWithinRange);
+   return Flights;
+}
+    
+
+
 
 
 public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights) 
@@ -182,6 +286,22 @@ public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> fl
         }
     });
     return earlyFlights;
+}
+
+
+public static ArrayList<Flight> getRoutes(ArrayList<Flight> originAirports, ArrayList<Flight> destinationAirports) 
+{
+  ArrayList<Flight> commonFlights = query.getCommonFlightsInTwoArrayLists(originAirports, destinationAirports);
+  return commonFlights;
+}
+
+public static int properTimeTaken(int departure, int arrival)
+{
+  if (arrival < departure)
+  {
+    arrival += 2400;
+  }
+  return arrival - departure;
 }
 }
 
