@@ -17,6 +17,8 @@ class Flight
   int isCancelled;
   int isDiverted;
   int distanceTraveledMi;
+  int scheduledTimeToTake;
+  int actualTimeTaken;
   int lateness;
   int earliness;
   
@@ -40,8 +42,10 @@ class Flight
     this.isCancelled = isCancelled;
     this.isDiverted = isDiverted;
     this.distanceTraveledMi = distanceTraveledMi;
-    this.lateness = actualDeparture - scheduledDeparture;
-    this.earliness = scheduledDeparture - actualDeparture;
+    this.lateness = query.properTimeTaken(actualDeparture, scheduledDeparture);
+    this.earliness = query.properTimeTaken(scheduledDeparture, actualDeparture);
+    this.scheduledTimeToTake = query.properTimeTaken(scheduledArrival,scheduledDeparture);
+    this.actualTimeTaken = query.properTimeTaken(actualArrival, actualDeparture);
   }
   
   String printFlight()
