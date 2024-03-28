@@ -14,9 +14,11 @@ ArrayList<Flight> departingFlights = new ArrayList<Flight>();
 PImage airportPhoto;
 PFont headerFont;
 
-  Airport(String departureAirport) //revert back to flight
+class Airport
+{
+  Airport(String departureAirport) //Flight statt String, nur beim Test 
   {
-    airportName = departureAirport.getOriginAirport();
+    //airportName = departureAirport.getOriginAirport();
     airportName = departureAirport;//add .getOriginAirport()
     ArrayList<Flight> departingFlights = getFlightsAssociatedWithOriginAirport(flightsInfo, airportName);
     ArrayList<Flight> arrivalFlights = getFlightsAssociatedWithOriginAirport(flightsInfo, airportName);
@@ -26,7 +28,25 @@ PFont headerFont;
     airportPhoto.resize(1280, 800);
   }
   
-  void draw()
+  ArrayList<Flight> returnDepartingFlights()
+  {
+    return departingFlights;
+  }
+  
+  ArrayList<Flight> returnArrivingFlights()
+  {
+    return arrivalFlights;
+  }
+  
+  
+  
+  
+}  
+
+
+
+  
+ /* void draw()
   {
     headerFont = loadFont("HelveticaNeue-Thin-48.vlw");
     textFont(headerFont, 48);
@@ -44,7 +64,7 @@ PFont headerFont;
     
     
     
-  }
+  }*/
   
   
   

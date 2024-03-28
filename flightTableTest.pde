@@ -10,7 +10,7 @@ final int LINE_CHART_ORIGIN_X = 100;
 final int LINE_CHART_ORIGIN_Y = SCREEN_Y-100; // 980
 void setup()
 {
-  size(1920, 1080);
+  size(1280, 800);
   flightTable = loadTable("flights2kCSV.csv", "header");
   /*  Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)*/
@@ -37,18 +37,80 @@ void setup()
 }
 void draw()
 {
+  
   background(120);
   textSize(8);
   
-    /* Kiley -- Testing airport class & how it draws)
-  Airport dulles = new Airport("Dulles International - VA");
-  dulles.draw();
-  */
+  /* //Kiley -- Testing airport class & how it draws)
+    Airport dulles = new Airport("IAD");
+    PImage airportPhoto;
+    PFont headerFont;
+    airportPhoto = loadImage("pixelatedDulles.png");
+    airportPhoto.resize(1280, 800);
+  
+  
+    headerFont = loadFont("HelveticaNeue-Thin-48.vlw");
+    textFont(headerFont, 48);
+    
+    fill(#FFFCE9);
+    image(airportPhoto, 0, 0);
+    text(airportName, 370, 50);
+    
+    //DepartureBoard
+    color boardColor = get(100, 200);
+    fill(boardColor, 200);
+     
+    stroke(#eae8eb);
+    rect(10, 300, 630, 330);
+    rect(640, 300, 630, 330);
+    fill(#64a4cc);
+    rect(10, 300, 1260, 33);
+    int yIncrement = 300;
+    for(int lineCount = 10; lineCount > 0; lineCount--)
+    {
+      yIncrement = yIncrement + 33;
+      line(10, yIncrement, 1270, yIncrement);
+    }
+    
+    //Headers
+    PFont mainFont = loadFont("HelveticaNeue-Light-48.vlw");
+    textFont(mainFont, 18);
+    fill(#eae8eb);
+    text("Departure Time", 15, 325); 
+    text("Arrival (Scheduled)", 150, 325);
+    text("Destination City", 400, 325);
+    
+    text("Arrival Time", 655, 325);
+    text("Status", 805, 325);
+    text("Arriving From", 1010, 325);
+    
+    ArrayList<Flight> departures = dulles.returnDepartingFlights();
+    ArrayList<Flight> arrivals = dulles.returnArrivingFlights();
+    
+    
+    int hour;
+    int minutes;
+    int yVal = 358;
+    for(int i = 0; i < 10; i++)
+    {
+      Flight currFlight = departures.get(i);
+      hour = currFlight.getScheduledDepartureHour();
+      //add minute method
+      text(hour, 15, yVal);
+      yVal = yVal + 33;
+    }
+    */
+    
+    //to do: timer, statistics, center text
+    
+    
+    
+    //end of my test section for airport
  
  ////////// USING QUERIES LINES 45-62 
 
  ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
- /*
+ 
   try
   {
   int distanceLowerBracket = 0;
@@ -79,12 +141,10 @@ void draw()
   displayFrequencyBarChart( flightsSorted, 1000 );
   println( flightsInfo.get(6).getFlightDay() ); 
   
-  */
  
  // displayBoxes();
  
  // displayDescriptiveStatistics( flightsSorted );
- 
  
  
  ArrayList <String> flightAirlines = new ArrayList<String>();
