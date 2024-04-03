@@ -1,5 +1,7 @@
+import java.util.Scanner;
 Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
+PFont flightSearchTableFont;
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
 final int BAR_CHART_MARGIN = 50; 
@@ -15,12 +17,15 @@ ArrayList<Button> graphButtons = new ArrayList<Button>();
 
 void setup()
 {
-  size(1280, 800);
+  size(1920, 1080);
+  flightSearchTableFont = loadFont("CourierNewPS-BoldMT-24.vlw");
   
   // Initialize buttons // added by pratyaksh
   backButton = new Button("Back", width - 110, 20, 100, 50);
   graphButtons.add(new Button("Bar Graph", width/2 - 150, 100, 300, 50));
   graphButtons.add(new Button("Line Chart", width/2 - 150, 200, 300, 50));
+  graphButtons.add(new Button("Descriptive Statistics", width/2 - 150, 300, 300, 50));
+  graphButtons.add(new Button("Flight search", width/2 - 150, 400, 300, 50));
   // Add other buttons as needed
   
   flightTable = loadTable("flights2kCSV.csv", "header");
@@ -123,17 +128,21 @@ void draw()
 
  ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
  
-  try
-  {
+    
   int distanceLowerBracket = 0;
-  int distanceUpperBracket = 6000;
-  int startDay = 3; 
-  int endDay = 7; 
+  int distanceUpperBracket = 5000;
+  int startDay = 1;
+  int endDay = 3;
+  
   ArrayList <String> flightOriginAirports = new ArrayList<String>();
   flightOriginAirports.add("LAX");
-  flightOriginAirports.add("JFK");
   flightOriginAirports.add("JAX");
-
+  flightOriginAirports.add("JFK");
+  try
+  {
+    
+   
+ 
   
   
   
@@ -156,7 +165,7 @@ void draw()
  
  // displayBoxes();
  
- // displayDescriptiveStatistics( flightsSorted );
+ 
  
  
  ArrayList <String> flightAirlines = new ArrayList<String>();
@@ -167,7 +176,7 @@ void draw()
  flightAirlines.add("G4");
  flightAirlines.add("WN");
  
- displayLineChartNumberOfFlights( flightsInfo, flightAirlines, 1, 6 );
+
  
  // Clear the screen with a black background when showing buttons
   if (screenState == 0) { // 173 - 191: added by pratyaksh
@@ -185,12 +194,29 @@ void draw()
   else if (screenState == 2) {
     clear(); // Clear the previous screen
     background(120); // Set the background for the line chart
-    displayLineChartNumberOfFlights(flightsInfo, flightAirlines, 1, 6);
+    displayLineChartNumberOfFlights(flightsSorted, flightAirlines, startDay, endDay);
     backButton.display();
   }
+   else if (screenState == 3) {
+    clear(); // Clear the previous screen
+    background(120); // Set the background for the line chart
+    displayDescriptiveStatistics( flightsSorted );
+    backButton.display();
+  }
+     else if (screenState == 4)
+   {
+    clear(); // Clear the previous screen
+    background(120); // Set the background for the line chart
+    displayFlightSearch( flightsSorted );
+    backButton.display();
+  }
+  
+    }
+   
+ 
   // Add cases for other graphs and clear the screen similarly
  
-}
+
 
 
 
@@ -410,7 +436,7 @@ void displayFrequencyBarChart( ArrayList flightsSet, int bracket  )
 void displayDescriptiveStatistics( ArrayList flightsSet )
 {
   textSize(30);
-  text("Descriptive statistic for the specified dataset: ", 500, 100 );
+  text("Descriptive statistic for the specified dataset :  ", SCREEN_X/2, 100 );
   
   ArrayList <Flight> flightsInfo = flightsSet;
   String longestDistanceFlightString = "";
@@ -420,7 +446,7 @@ void displayDescriptiveStatistics( ArrayList flightsSet )
   flightsInfo.get(longestDistanceFlightIndex).originCity + ", " + flightsInfo.get(longestDistanceFlightIndex).originState + " to " + flightsInfo.get(longestDistanceFlightIndex).destinationAirport +
   ", " + flightsInfo.get(longestDistanceFlightIndex).destinationCity + ", " + flightsInfo.get(longestDistanceFlightIndex).destinationState;
   textSize(20);
-  text(longestDistanceFlightString, 500, 150 );
+  text(longestDistanceFlightString, SCREEN_X/2, 150 );
   
   String shortestDistanceFlightString = "";
   int shortestDistanceFlightIndex = getShortestDistanceFlightIndex( flightsInfo );
@@ -429,25 +455,25 @@ void displayDescriptiveStatistics( ArrayList flightsSet )
   flightsInfo.get(shortestDistanceFlightIndex).originCity + ", " + flightsInfo.get(shortestDistanceFlightIndex).originState + " to " + flightsInfo.get(shortestDistanceFlightIndex).destinationAirport +
   ", " + flightsInfo.get(shortestDistanceFlightIndex).destinationCity + ", " + flightsInfo.get(shortestDistanceFlightIndex).destinationState;
   textSize(20);
-  text(shortestDistanceFlightString, 500, 200 );
+  text(shortestDistanceFlightString, SCREEN_X/2, 200 );
   
   String averageDistanceString ="";
   double averageFlightDistance = getAverageFlightDistance( flightsInfo );
   averageDistanceString+="Average miles travelled by flights  : " + averageFlightDistance;
   textSize(20);
-  text(averageDistanceString, 500, 250 );
+  text(averageDistanceString, SCREEN_X/2, 250 );
   
   String rangeString="";
   int rangeDistance = getRangeDistance( flightsInfo );
   rangeString+="Range of distance in miles travelled by flights : " + rangeDistance;
   textSize(20);
-  text(rangeString, 500, 300 );
+  text(rangeString, SCREEN_X/2, 300 );
   
   String standardDeviationString="";
   double standardDeviation = getStandardDeviation( flightsInfo );
   standardDeviationString+="Standard deviation of distance travelled by flights in miles : " + standardDeviation;
   textSize(20);
-  text(standardDeviationString, 500, 350 );
+  text(standardDeviationString, SCREEN_X/2, 350 );
   
 }
 
@@ -486,7 +512,7 @@ void displayBoxes()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////// LINE CHART
+///////////////////////////////////////////////////////////////////////////////////////////////// LINE CHART - JOSEPH MCSWEENEY
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -678,7 +704,102 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
   fill( redness, greeness, blueness );
   line(xpos1, ypos1, xpos2, ypos2);
  
- 
+}
+//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////// FLIGHT SEARCHER - JOSEPH MCSWEENEY
+//////////////////////////////////////////////////////////////////////////////
+
+void displayFlightSearch( ArrayList flightsSet )
+{
+  ArrayList<Flight> list = new ArrayList<Flight>();
+  list = flightsSet;
+  
+  /// Organise list of flights into sets of 20 or less so as to display on screen 
+  
+  ArrayList<ArrayList> pagesOfFlights = new ArrayList<ArrayList>();
+  
+  for ( int i = list.size(); i>0; i-=24 )
+  {
+    ArrayList<Flight> flightPage = new ArrayList<Flight>();
+   for ( int a = 0; a<( list.size() < 24 ? list.size() : 24 ); a++ )
+   {
+    
+    flightPage.add(list.get(a));
+    list.remove(a);
+   }
+   pagesOfFlights.add(flightPage);
+  
+  }
+  
+  int pageScreen = 0;
+  int numberOfPages = pagesOfFlights.size();
+  
+  for ( int i = 0; i<pagesOfFlights.size(); i++ )
+  {
+
+    displayPage( pagesOfFlights, 0 );
+    
+   }
+    
+
+
+    
+    
+  }
+  
+void displayPage( ArrayList pagesOfFlights, int pageScreen )
+{
+      ArrayList<ArrayList> listOfFlights = new ArrayList<ArrayList>();
+      listOfFlights = pagesOfFlights;
+      ArrayList<Flight> currentPage = new ArrayList<Flight>();
+    currentPage = listOfFlights.get(pageScreen);
+     textFont(flightSearchTableFont, 24);
+     fill(0);
+     rect(30, 20, 1570, 10);
+     rect(30, 60, 1570, 17);
+     rect(30, 1035, 1570, 10);
+     rect(30, 20, 10, 2000);
+     rect(1590, 20, 10, 2000);
+     rect(280, 20, 10, 2000);
+     rect(410, 20, 10, 2000);
+     rect(640, 20, 10, 2000);
+     rect(780, 20, 10, 2000);
+     rect(1020, 20, 10, 2000);
+     rect(1140, 20, 10, 2000);
+     rect(1260, 20, 10, 2000);
+     rect(1400, 20, 10, 2000);
+
+     
+    
+          for ( int a = 0; a<currentPage.size(); a++ )
+    {
+     
+
+      textSize(20);
+      textAlign(LEFT);
+      text( ( currentPage.get(a).decodeAirline(currentPage.get(a) )     ), 50, 100+(a*40) );
+      text( currentPage.get(a).getOriginAirport()   , 328, 100+(a*40) );
+      text( currentPage.get(a).getOriginCity()   , 430, 100+(a*40) );
+      text( currentPage.get(a).getDestinationAirport()   , 695, 100+(a*40) );
+      text( currentPage.get(a).getDestinationCity()   , 800, 100+(a*40) );
+      text( currentPage.get(a).getFlightDay() + " Jan"  , 1040, 100+(a*40) );
+      text( currentPage.get(a).getActualDeparture()   , 1160, 100+(a*40) );
+      text( currentPage.get(a).getActualArrival()   , 1280, 100+(a*40) );
+      text( ( currentPage.get(a).getIsCancelled() == 0 ? "Operational" : "Cancelled" )   , 1420, 100+(a*40) );
+      textSize(13);
+      text("AIRLINE", 50, 50 );
+      text("ORN. AIRPORT", 300, 50 );
+      text("ORN. CITY", 430, 50 );
+      text("DEST. AIRPORT", 660, 50 );
+      text("DEST. CITY", 800, 50 );
+      text("DATE", 1040, 50 );
+      text("DEP. TIME", 1160, 50 );
+      text("ARR. TIME", 1280, 50 );
+      text("STATUS", 1420, 50 );
+      rect(30, 115+(a*40), 1570, 5);
+     
+      
+    }
 }
 
 void mousePressed() { // added by pratyaksh. 
