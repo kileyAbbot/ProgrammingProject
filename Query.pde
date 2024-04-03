@@ -92,6 +92,28 @@ public static class query
         return flightsAssociatedWithCity;
     }
     
+   
+      public static ArrayList<Flight>  getFlightsAssociatedWithOriginState(ArrayList<Flight> flights, ArrayList<String> originStates)
+    {
+        String flightState;
+        String flightStateForComparison;
+        ArrayList<Flight> flightsAssociatedWithState= new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          for ( int a = 0; a < originStates.size(); a++ )
+          {
+            flightState = flights.get(i).originState;
+            flightStateForComparison = originStates.get(a);
+            if ( flightState.equals(flightStateForComparison))
+            {
+              flightsAssociatedWithState.add(flights.get(i));
+            }
+          }
+ 
+        }
+        return flightsAssociatedWithState;
+    }
+    
     public static ArrayList<Flight> getFlightsAssociatedWithAirline(ArrayList<Flight> flights, ArrayList<String> airlines)
     {
         String flightAirline;
@@ -284,6 +306,13 @@ public static int getTotalFlightsFromCity( ArrayList<Flight> flights, ArrayList<
    return count;
 }
 
+public static int getTotalFlightsFromState( ArrayList<Flight> flights, ArrayList<String> originStates )
+{
+   ArrayList<Flight> FlightsFromState = query.getFlightsAssociatedWithOriginState (flights, originStates);
+   int count = FlightsFromState.size();
+   return count;
+}
+
 public static int getTotalFlightsFromAirline( ArrayList<Flight> flights, ArrayList<String> airlines)
 {
    ArrayList<Flight> FlightsFromAirline = query.getFlightsAssociatedWithAirline(flights, airlines);
@@ -349,6 +378,178 @@ public static ArrayList<ArrayList<String>> airlinesSortedByMostOutgoingFlights (
     }*/
     
    return airlineFlights;
+}
+
+ public static ArrayList<Flight> getFlightsAssociatedWithOrState(ArrayList<Flight> flights, String state) //jake
+    {
+        String compState;
+       
+        ArrayList<Flight> stateFlights = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+         
+            compState = flights.get(i).originState;
+           
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              stateFlights.add(flights.get(i));
+            }
+        }
+        return stateFlights;
+    }
+   
+    public static ArrayList<Flight> getFlightsAssociatedWithDestState(ArrayList<Flight> flights, String state) //jake
+    {
+        String compState;
+       
+        ArrayList<Flight> stateFlights = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+         
+            compState = flights.get(i).destinationState;
+           
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              stateFlights.add(flights.get(i));
+            }
+         
+ 
+        }
+        return stateFlights;
+    }
+   
+    public static ArrayList<ArrayList<String>> busiestAirportsInSet (ArrayList<Flight> flights)
+{
+    ArrayList<String> airportsInArrayList =  getAllAirports(flights);
+    ArrayList<ArrayList<String>> airportFlights = new ArrayList<>(); //2d arrayList/ arrayList of arrayList of strings (column 0 stores airport, column 1 total flights as string)
+    for ( int i =0; i < airportsInArrayList.size(); i++)
+    {
+      String airport = airportsInArrayList.get(i);
+      ArrayList<String> airportInfo = new ArrayList<>();
+      airportInfo.add(airport); // Add airport name
+      airportInfo.add(Integer.toString(getTotalFlightsFromAirport(flights, airportInfo)));
+      airportFlights.add(airportInfo);
+    }
+    Collections.sort(airportFlights, new Comparator<ArrayList<String>>()
+    {
+      public int compare(ArrayList<String> airport1, ArrayList<String> airport2)
+      {
+        int totalFlights1 = Integer.parseInt(airport1.get(1));
+        int totalFlights2 = Integer.parseInt(airport2.get(1));
+        return Integer.compare(totalFlights2, totalFlights1);
+      }
+    });
+    //test to show it works
+    for (ArrayList<String> airportInfo : airportFlights)
+    {
+        System.out.println("Airport: " + airportInfo.get(0) + ", Total Flights: " + airportInfo.get(1));
+    }
+   return airportFlights;
+}
+
+public static ArrayList<ArrayList<String>> busiestStatesInSet (ArrayList<Flight> flights) //jake
+{
+    ArrayList<String> statesInArrayList =  getAllStates(flights);
+    ArrayList<ArrayList<String>> stateFlights = new ArrayList<>();
+    for ( int i =0; i < statesInArrayList.size(); i++)
+    {
+      String state = statesInArrayList.get(i);
+      ArrayList<String> stateInfo = new ArrayList<>();
+      stateInfo.add(state); // Add airport name
+      stateInfo.add(Integer.toString(getTotalFlightsFromState(flights, stateInfo)));
+      stateFlights.add(stateInfo);
+    }
+    Collections.sort(stateFlights, new Comparator<ArrayList<String>>()
+    {
+      public int compare(ArrayList<String> state1, ArrayList<String> state2)
+      {
+        int totalFlights1 = Integer.parseInt(state1.get(1));
+        int totalFlights2 = Integer.parseInt(state2.get(1));
+        return Integer.compare(totalFlights2, totalFlights1);
+      }
+    });
+    //test to show it works
+    for (ArrayList<String> stateInfo : stateFlights)
+    {
+        System.out.println("State: " + stateInfo.get(0) + ", Total Flights: " + stateInfo.get(1));
+    }
+   return stateFlights;
+}
+public static ArrayList<String> getCitiesFromState (ArrayList<Flight> flights, String state) //jake
+{
+  Set<String> cities = new HashSet<>();
+  String compState;
+  for (int i = 0; i < flights.size(); i++)
+        {          
+            compState = flights.get(i).originState;        
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              cities.add(flights.get(i).originCity);
+            }
+        }
+        for (int i = 0; i < flights.size(); i++)
+        {          
+            compState = flights.get(i).destinationState;        
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              cities.add(flights.get(i).destinationCity);
+            }
+        }  
+  return new ArrayList<>(cities);
+}
+
+public static ArrayList<String> getAirportsFromState (ArrayList<Flight> flights, String state) //jake
+{
+  Set<String> airports = new HashSet<>();
+  String compState;
+  for (int i = 0; i < flights.size(); i++)
+        {          
+            compState = flights.get(i).originState;        
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              airports.add(flights.get(i).originAirport);
+            }
+        }
+        for (int i = 0; i < flights.size(); i++)
+        {          
+            compState = flights.get(i).destinationState;        
+            if ( state.equals(compState) )
+            {
+             // println( flightAirport );
+              airports.add(flights.get(i).destinationAirport);
+            }
+        }  
+  return new ArrayList<>(airports);
+}
+   
+public static ArrayList<String> getAirlinesFromAirport (ArrayList<Flight> flights, String airport) //jake
+{
+  Set<String> airlines = new HashSet<>();
+  String compAirport;
+  for (int i = 0; i < flights.size(); i++)
+        {          
+            compAirport = flights.get(i).originAirport;        
+            if ( airport.equals(compAirport) )
+            {
+             
+              airlines.add(flights.get(i).airline);
+            }
+        }
+        for (int i = 0; i < flights.size(); i++)
+        {          
+            compAirport = flights.get(i).destinationAirport;        
+            if ( airport.equals(compAirport) )
+            {
+           
+              airlines.add(flights.get(i).airline);
+            }
+        }  
+  return new ArrayList<>(airlines);
 }
 
 public static ArrayList<ArrayList<String>> citiesSortedByMostOutgoingFlights (ArrayList<Flight> flights)
