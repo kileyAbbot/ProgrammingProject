@@ -21,6 +21,8 @@ class Flight
   int actualTimeTaken;
   int lateness;
   int earliness;
+  int arrivalLateness;
+  int arrivalEarliness;
   int flightDay;
   
   Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
@@ -48,6 +50,13 @@ class Flight
     this.scheduledTimeToTake = query.properTimeTaken(scheduledArrival,scheduledDeparture);
     this.actualTimeTaken = query.properTimeTaken(actualArrival, actualDeparture);
     this.flightDay = getFlightDay();
+    lateness = query.properTimeTaken(actualDeparture, scheduledDeparture);
+    earliness = query.properTimeTaken(scheduledDeparture, actualDeparture);
+    arrivalLateness = query.properTimeTaken(actualArrival, scheduledArrival);
+    arrivalEarliness = query.properTimeTaken(actualArrival, scheduledArrival);
+    scheduledTimeToTake = query.properTimeTaken(scheduledArrival,scheduledDeparture);
+    actualTimeTaken = query.properTimeTaken(actualArrival, actualDeparture);
+    flightDay = getFlightDay();
   }
   
   String printFlight()
