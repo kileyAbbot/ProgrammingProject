@@ -1,6 +1,7 @@
 import java.util.Scanner;
 Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
+ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
 PFont flightSearchTableFont;
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
@@ -11,8 +12,14 @@ final int BAR_CHART_HEIGHT = 500;
 final int LINE_CHART_ORIGIN_X = 100;
 final int LINE_CHART_ORIGIN_Y = SCREEN_Y-100; // 980
 
+String dateRangeInput = ""; // To store user input for date range
+boolean isDateRangeInputActive = false; // Flag to indicate if date range input mode is active
+int dateRangeStartDay = 1; // Default start day, adjust as per your requirements
+int dateRangeEndDay = 31; // Default end day, adjust as per your requirements
+
 int screenState = 0; // 0 for default screen with buttons, 1 for bar chart, etc.
 Button backButton;
+Button dateRangeButton;
 ArrayList<Button> graphButtons = new ArrayList<Button>();
 
 void setup()
@@ -21,7 +28,8 @@ void setup()
   flightSearchTableFont = loadFont("CourierNewPS-BoldMT-24.vlw");
   
   // Initialize buttons // added by pratyaksh
-  backButton = new Button("Back", width - 110, 20, 100, 50);
+  backButton = new Button("Back", width - 310, 20, 100, 50);
+  dateRangeButton = new Button("Date Range Filter", backButton.x - 750, backButton.y, 200, 50);
   graphButtons.add(new Button("Bar Graph", width/2 - 150, 100, 300, 50));
   graphButtons.add(new Button("Line Chart", width/2 - 150, 200, 300, 50));
   graphButtons.add(new Button("Descriptive Statistics", width/2 - 150, 300, 300, 50));
@@ -176,39 +184,48 @@ void draw()
  flightAirlines.add("G4");
  flightAirlines.add("WN");
  
-
- 
- // Clear the screen with a black background when showing buttons
-  if (screenState == 0) { // 173 - 191: added by pratyaksh
-    background(0); // Set background to black
+ // Use a conditional check to clear or set the background based on the current screen state
+  if (screenState == 0) {
+    background(0); // Set background to black for the main screen
+    // Display all buttons on the main screen
     for (Button button : graphButtons) {
       button.display();
     }
   } 
-  else if (screenState == 1) {
-    clear(); // Clear the previous screen
-    background(120); // Set the background for the bar chart
-    displayFrequencyBarChart(flightsSorted, 1000);
+  else {
+    background(120); // Set a different background for other screens if needed
+
+    // Conditionally display the bar chart if its corresponding screenState is active
+    if (screenState == 1) {
+      displayFrequencyBarChart(flightsSorted, 1000);
+    }
+  
+    // Similarly handle the line chart and other states with their own screenState
+    if (screenState == 2) {
+      if (!isDateRangeInputActive) {
+        displayLineChartNumberOfFlights(flightsSorted, flightAirlines, dateRangeStartDay, dateRangeEndDay);
+      } else {
+        // Instructions for entering date range
+        fill(255); // White text color for visibility
+        textSize(16); // Example text size, adjust as needed
+        text("Enter your date range filter (eg: 1/2 - 1/5)", dateRangeButton.x + 100, dateRangeButton.y + 70);
+        text(dateRangeInput, dateRangeButton.x + 100, dateRangeButton.y + 90); // Display current input
+      }
+    }
+
+    // Handle other screen states (e.g., descriptive statistics, flight search)
+    if (screenState == 3) {
+      displayDescriptiveStatistics(flightsSorted);
+    }
+    if (screenState == 4) {
+      displayFlightSearch(flightsSorted);
+    }
+
+    // Always display the back and date range buttons outside the main screen state
     backButton.display();
-  } 
-  else if (screenState == 2) {
-    clear(); // Clear the previous screen
-    background(120); // Set the background for the line chart
-    displayLineChartNumberOfFlights(flightsSorted, flightAirlines, startDay, endDay);
-    backButton.display();
-  }
-   else if (screenState == 3) {
-    clear(); // Clear the previous screen
-    background(120); // Set the background for the line chart
-    displayDescriptiveStatistics( flightsSorted );
-    backButton.display();
-  }
-     else if (screenState == 4)
-   {
-    clear(); // Clear the previous screen
-    background(120); // Set the background for the line chart
-    displayFlightSearch( flightsSorted );
-    backButton.display();
+    if (screenState == 2) {
+      dateRangeButton.display();
+    }
   }
   
     }
@@ -815,6 +832,61 @@ void mousePressed() { // added by pratyaksh.
     if (backButton.isClicked(mouseX, mouseY)) {
       clear(); // Clear the graph before going back to the buttons
       screenState = 0;
+    }
+  }
+  if (screenState == 2 && dateRangeButton.isClicked(mouseX, mouseY)) {
+    isDateRangeInputActive = !isDateRangeInputActive; // Toggle input mode
+  }
+}
+
+void filterFlightsByDateRange() {
+    ArrayList<Flight> filteredFlights = new ArrayList<Flight>();
+    for (Flight flight : flightsInfo) { 
+        if (flight.getFlightDay() >= dateRangeStartDay && flight.getFlightDay() <= dateRangeEndDay) {
+            filteredFlights.add(flight);
+        }
+    }
+    flightsSorted = filteredFlights; 
+}
+
+
+void keyPressed() {
+  if (isDateRangeInputActive) {
+    // If the ENTER or RETURN key is pressed, it's time to process the date range input
+    if (key == ENTER || key == RETURN) {
+      // Assume the input format is "m/d - m/d" and split it into start and end parts
+      String[] parts = dateRangeInput.split(" - ");
+      if (parts.length == 2) {
+        // Further split each part into month/day
+        String[] startParts = parts[0].split("/");
+        String[] endParts = parts[1].split("/");
+        if (startParts.length == 2 && endParts.length == 2) {
+          // Parse the start and end day from the input
+          int startMonth = Integer.parseInt(startParts[0]); // Start month (not used in current filtering logic)
+          int startDay = Integer.parseInt(startParts[1]); // Start day
+          int endMonth = Integer.parseInt(endParts[0]); // End month (not used in current filtering logic)
+          int endDay = Integer.parseInt(endParts[1]); // End day
+
+          // Update the global variables for date range
+          dateRangeStartDay = startDay;
+          dateRangeEndDay = endDay;
+
+          // Now filter the flights based on the updated date range
+          filterFlightsByDateRange();
+
+          // Reset for next input
+          isDateRangeInputActive = false;
+          dateRangeInput = "";
+        }
+      }
+    } 
+    // Allow numeric characters, slashes, dashes, and spaces for date input
+    else if ((key >= '0' && key <= '9') || key == '/' || key == '-' || key == ' ') {
+      dateRangeInput += key;
+    } 
+    // Enable backspace functionality for corrections
+    else if (key == BACKSPACE && dateRangeInput.length() > 0) {
+      dateRangeInput = dateRangeInput.substring(0, dateRangeInput.length() - 1);
     }
   }
 }
