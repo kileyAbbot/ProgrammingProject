@@ -1,7 +1,6 @@
 import java.util.Scanner;
 Table flightTable;
 ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
-ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
 PFont flightSearchTableFont;
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
@@ -11,27 +10,24 @@ final int BAR_CHART_MAX_HEIGHT = 400;
 final int BAR_CHART_HEIGHT = 500;
 final int LINE_CHART_ORIGIN_X = 100;
 final int LINE_CHART_ORIGIN_Y = SCREEN_Y-100; // 980
-
-String dateRangeInput = ""; // To store user input for date range
-boolean isDateRangeInputActive = false; // Flag to indicate if date range input mode is active
-int dateRangeStartDay = 1; // Default start day, adjust as per your requirements
-int dateRangeEndDay = 31; // Default end day, adjust as per your requirements
+int pagesOfFlightsScreen = -1;
+int numberOfLineChartPointDisplays = 0;
 
 int screenState = 0; // 0 for default screen with buttons, 1 for bar chart, etc.
-Button backButton;
-Button dateRangeButton;
+Button backButton, nextPage, previousPage;
 ArrayList<Button> graphButtons = new ArrayList<Button>();
 
 void setup()
 {
   size(1920, 1080);
   flightSearchTableFont = loadFont("CourierNewPS-BoldMT-24.vlw");
-  
+
   // Initialize buttons // added by pratyaksh
-  backButton = new Button("Back", width - 310, 20, 100, 50);
-  dateRangeButton = new Button("Date Range Filter", backButton.x - 750, backButton.y, 200, 50);
-  graphButtons.add(new Button("Bar Graph", width/2 - 150, 100, 300, 50));
-  graphButtons.add(new Button("Line Chart", width/2 - 150, 200, 300, 50));
+  backButton = new Button("Back", width - 110, 20, 100, 50);
+  nextPage = new Button("Next page", width - 210, 20, 100, 50);
+  previousPage = new Button("Previous page", width - 310, 20, 100, 50);
+ 
+  graphButtons.add(new Button("Line Chart, frequency of flights on particular days", width/2 - 150, 200, 300, 50));
   graphButtons.add(new Button("Descriptive Statistics", width/2 - 150, 300, 300, 50));
   graphButtons.add(new Button("Flight search", width/2 - 150, 400, 300, 50));
   // Add other buttons as needed
@@ -46,19 +42,22 @@ void setup()
     row.getInt("CRS_ARR_TIME"), row.getInt("ARR_TIME"), row.getInt("CANCELLED"), row.getInt("DIVERTED"), row.getInt("DISTANCE")));
   }
   
+  /*
   for(int i = 0; i < 5; i++)
   {
     System.out.println(flightsInfo.get(i).printFlight());
   }
+  */
     
   int[] flightDistanceFrequency = getFlightDistanceFrequencyArray( flightsInfo, 1000 );
-  
+  /*
   for ( int i = 0; i<flightDistanceFrequency.length; i++ )
   {
     println("Number of flights in " + i*1000 + "-" + (i+1)*1000 + " miles bracket : " + flightDistanceFrequency[i]); 
   }
+  */
   
-  println( getFrequencyAirlineParticularDay(flightsInfo, "AA", 1 ));
+ // println( getFrequencyAirlineParticularDay(flightsInfo, "AA", 1 ));
 }
 void draw()
 {
@@ -140,7 +139,7 @@ void draw()
   int distanceLowerBracket = 0;
   int distanceUpperBracket = 5000;
   int startDay = 1;
-  int endDay = 3;
+  int endDay = 8;
   
   ArrayList <String> flightOriginAirports = new ArrayList<String>();
   flightOriginAirports.add("LAX");
@@ -168,7 +167,7 @@ void draw()
   }
   
   displayFrequencyBarChart( flightsSorted, 1000 );
-  println( flightsInfo.get(6).getFlightDay() ); 
+  // println( flightsInfo.get(6).getFlightDay() ); 
   
  
  // displayBoxes();
@@ -184,54 +183,40 @@ void draw()
  flightAirlines.add("G4");
  flightAirlines.add("WN");
  
- // Use a conditional check to clear or set the background based on the current screen state
-  if (screenState == 0) {
-    background(0); // Set background to black for the main screen
-    // Display all buttons on the main screen
+
+ 
+ // // clear the screen with a black background when showing buttons
+  if (screenState == 0) { // 173 - 191: added by pratyaksh
+    background(0); // Set background to black
     for (Button button : graphButtons) {
       button.display();
     }
   } 
-  else {
-    background(120); // Set a different background for other screens if needed
 
-    // Conditionally display the bar chart if its corresponding screenState is active
-    if (screenState == 1) {
-      displayFrequencyBarChart(flightsSorted, 1000);
-    }
-  
-    // Similarly handle the line chart and other states with their own screenState
-    if (screenState == 2) {
-      if (!isDateRangeInputActive) {
-        displayLineChartNumberOfFlights(flightsSorted, flightAirlines, dateRangeStartDay, dateRangeEndDay);
-      } else {
-        // Instructions for entering date range
-        fill(255); // White text color for visibility
-        textSize(16); // Example text size, adjust as needed
-        text("Enter your date range filter (eg: 1/2 - 1/5)", dateRangeButton.x + 100, dateRangeButton.y + 70);
-        text(dateRangeInput, dateRangeButton.x + 100, dateRangeButton.y + 90); // Display current input
-      }
-    }
-
-    // Handle other screen states (e.g., descriptive statistics, flight search)
-    if (screenState == 3) {
-      displayDescriptiveStatistics(flightsSorted);
-    }
-    if (screenState == 4) {
-      displayFlightSearch(flightsSorted);
-    }
-
-    // Always display the back and date range buttons outside the main screen state
+  else if (screenState == 1) {
+    // clear(); // // clear the previous screen
+    background(120); // Set the background for the line chart
+    displayLineChartNumberOfFlights(flightsSorted, flightAirlines, startDay, endDay);
     backButton.display();
-    if (screenState == 2) {
-      dateRangeButton.display();
-    }
+  }
+   else if (screenState == 2) {
+    // clear(); // // clear the previous screen
+    background(120); // Set the background for the line chart
+    displayDescriptiveStatistics( flightsSorted );
+    backButton.display();
+  }
+     else if (screenState == 3)
+   {
+    // clear(); // // clear the previous screen
+    background(120); // Set the background for the line chart
+    displayFlightSearch( flightsSorted );
+    backButton.display();
   }
   
     }
    
  
-  // Add cases for other graphs and clear the screen similarly
+  // Add cases for other graphs and // clear the screen similarly
  
 
 
@@ -544,7 +529,7 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
 {
 
   // 348 - 365 : Check whether valid date range
- 
+  
  ArrayList <Flight> flights = new ArrayList<Flight>();
  ArrayList <String> flightsAirlines = new ArrayList<String>();
  flightsAirlines = flightsAirlinesConcerned;
@@ -567,9 +552,9 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
   for ( int i = 0; i<flightsAirlines.size(); i++ )
   {
    
-    airlinesConcernedColourRed.add((int)((i+1)*100)%250);
-    airlinesConcernedColourGreen.add((int)((i+1)*200)%250);
-    airlinesConcernedColourBlue.add((int)((i+1)*300)%250);
+    airlinesConcernedColourRed.add((int)((i+155)*100)%250);
+    airlinesConcernedColourGreen.add((int)((i+17)*200)%250);
+    airlinesConcernedColourBlue.add((int)((i+1732)*300)%200);
 
   }
  
@@ -582,10 +567,18 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
   int lineChartLength = (SCREEN_X-200)-(LINE_CHART_ORIGIN_X);
   int lineChartHeight = LINE_CHART_ORIGIN_Y-200;
  
+  
   fill(255);
   textSize(15);
+  
   text("Dates", SCREEN_X/2, SCREEN_Y-50);
-  text("No. Flights", 20, SCREEN_Y/2 );
+  
+  pushMatrix();
+  translate(20, SCREEN_Y/2);
+  rotate(radians(270));
+  text("Frequency of Flights", 0, 0 );
+  popMatrix();
+  
  
  
   int freeSpaces = numberOfDaysConcerned-1;
@@ -604,13 +597,13 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
       fill(airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
       square(50 + a*50, 50, 20 );
       textSize(20);
-      text( flightsAirlines.get(a), 70 + a*50, 50 );
+      text( flightsAirlines.get(a), 80 + a*50, 40 );
      
      if ( i == 0 )
      {
        
        float xpos = (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X);
-       float ypos = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/250);
+       float ypos = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/100);
        drawLineChartPoint( xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a), getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i), flightsAirlines.get(a), startDay+i );
        
        
@@ -622,9 +615,9 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
      else
      {
        float xpos = (float)((freeSpaceLength*i)+LINE_CHART_ORIGIN_X);
-       float ypos = (float)( LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*(((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/250));
+       float ypos = (float)( LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*(((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i)/100));
        float xposPrevious = (float)((freeSpaceLength*(i-1))+LINE_CHART_ORIGIN_X);
-       float yposPrevious = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+(i-1))/250);
+       float yposPrevious = (float)(LINE_CHART_ORIGIN_Y)-((float)lineChartHeight)*((float)getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+(i-1))/100);
        drawLineChartPoint( xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a), getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i), flightsAirlines.get(a), startDay+i );
        drawLineChartLine( xposPrevious, yposPrevious, xpos, ypos, airlinesConcernedColourRed.get(a), airlinesConcernedColourGreen.get(a), airlinesConcernedColourRed.get(a) );
         if ( getFrequencyAirlineParticularDay(flights, flightsAirlines.get(a), startDay+i) > 0 )
@@ -648,7 +641,7 @@ void displayLineChartNumberOfFlights( ArrayList flightsSet, ArrayList flightsAir
     fill(255);
     double a = (double)lineChartHeight/5;
     double notchPlacement = (double)i*(double)a;
-    String frequencyText = "" + i*50;
+    String frequencyText = "" + i*20;
     textSize(15);
     text(frequencyText, (float)(LINE_CHART_ORIGIN_X-20), (float)((float)LINE_CHART_ORIGIN_Y-(float)(notchPlacement)));
    
@@ -702,17 +695,21 @@ int getFrequencyAirlineParticularDay( ArrayList airlinesConcernedFlights, String
 void drawLineChartPoint( float xpos, float ypos, int redness, int greeness, int blueness, int frequency, String airline, int day )
 {
  
+  
   fill( redness, greeness, blueness );
   circle(xpos, ypos, 15);
  
   if ((abs(xpos - mouseX) < 15 || abs(mouseX - xpos) < 15) && (abs(ypos - mouseY) < 15 || abs(mouseY - ypos) < 15))
   {
+    noLoop();
     fill( redness, greeness, blueness );
-    textSize( 30 );
-    text("Frequency of flights for " + airline + " on " + day + " Jan : " + frequency, 100, 100 );
+    textSize( 20 );
+    text("Frequency of flights for " + airline + " on " + day + " Jan : " + frequency, xpos , ypos - 50 );
+    
+    
    
   }
- 
+  loop();
   
 }
 
@@ -728,10 +725,11 @@ void drawLineChartLine( float xpos1, float ypos1, float xpos2, float ypos2, int 
 
 void displayFlightSearch( ArrayList flightsSet )
 {
+  
   ArrayList<Flight> list = new ArrayList<Flight>();
   list = flightsSet;
   
-  /// Organise list of flights into sets of 20 or less so as to display on screen 
+  /// Organise list of flights into sets of 24 or less so as to display on screen 
   
   ArrayList<ArrayList> pagesOfFlights = new ArrayList<ArrayList>();
   
@@ -748,16 +746,28 @@ void displayFlightSearch( ArrayList flightsSet )
   
   }
   
-  int pageScreen = 0;
-  int numberOfPages = pagesOfFlights.size();
-  
-  for ( int i = 0; i<pagesOfFlights.size(); i++ )
-  {
+ 
 
-    displayPage( pagesOfFlights, 0 );
+
+
+   
+
+    displayPage( pagesOfFlights, pagesOfFlightsScreen );
     
-   }
+    if (pagesOfFlightsScreen!=0)
+    {
+     previousPage.display(); 
+    }
     
+    if(pagesOfFlightsScreen!=pagesOfFlights.size()-1)
+    {
+     nextPage.display(); 
+    }
+    
+ 
+ 
+
+  
 
 
     
@@ -823,70 +833,38 @@ void mousePressed() { // added by pratyaksh.
   if (screenState == 0) {
     for (int i = 0; i < graphButtons.size(); i++) {
       if (graphButtons.get(i).isClicked(mouseX, mouseY)) {
-        clear(); // Clear the screen before drawing the graph
+        // // clear(); // // clear the screen before drawing the graph
         screenState = i + 1; // Assuming order matches the state
+        if ( graphButtons.get(2).isClicked(mouseX, mouseY))
+        {
+         pagesOfFlightsScreen = 0; 
+        }
         return;
       }
     }
   } else {
     if (backButton.isClicked(mouseX, mouseY)) {
-      clear(); // Clear the graph before going back to the buttons
+      // // clear(); // // clear the graph before going back to the buttons
       screenState = 0;
-    }
-  }
-  if (screenState == 2 && dateRangeButton.isClicked(mouseX, mouseY)) {
-    isDateRangeInputActive = !isDateRangeInputActive; // Toggle input mode
-  }
-}
-
-void filterFlightsByDateRange() {
-    ArrayList<Flight> filteredFlights = new ArrayList<Flight>();
-    for (Flight flight : flightsInfo) { 
-        if (flight.getFlightDay() >= dateRangeStartDay && flight.getFlightDay() <= dateRangeEndDay) {
-            filteredFlights.add(flight);
-        }
-    }
-    flightsSorted = filteredFlights; 
-}
-
-
-void keyPressed() {
-  if (isDateRangeInputActive) {
-    // If the ENTER or RETURN key is pressed, it's time to process the date range input
-    if (key == ENTER || key == RETURN) {
-      // Assume the input format is "m/d - m/d" and split it into start and end parts
-      String[] parts = dateRangeInput.split(" - ");
-      if (parts.length == 2) {
-        // Further split each part into month/day
-        String[] startParts = parts[0].split("/");
-        String[] endParts = parts[1].split("/");
-        if (startParts.length == 2 && endParts.length == 2) {
-          // Parse the start and end day from the input
-          int startMonth = Integer.parseInt(startParts[0]); // Start month (not used in current filtering logic)
-          int startDay = Integer.parseInt(startParts[1]); // Start day
-          int endMonth = Integer.parseInt(endParts[0]); // End month (not used in current filtering logic)
-          int endDay = Integer.parseInt(endParts[1]); // End day
-
-          // Update the global variables for date range
-          dateRangeStartDay = startDay;
-          dateRangeEndDay = endDay;
-
-          // Now filter the flights based on the updated date range
-          filterFlightsByDateRange();
-
-          // Reset for next input
-          isDateRangeInputActive = false;
-          dateRangeInput = "";
-        }
+      if (screenState==4)
+      {
+        pagesOfFlightsScreen = -1; 
       }
-    } 
-    // Allow numeric characters, slashes, dashes, and spaces for date input
-    else if ((key >= '0' && key <= '9') || key == '/' || key == '-' || key == ' ') {
-      dateRangeInput += key;
-    } 
-    // Enable backspace functionality for corrections
-    else if (key == BACKSPACE && dateRangeInput.length() > 0) {
-      dateRangeInput = dateRangeInput.substring(0, dateRangeInput.length() - 1);
+    }
+    
+    if (nextPage.isClicked(mouseX, mouseY))
+    {
+      pagesOfFlightsScreen++;
+      println(pagesOfFlightsScreen);
+    }
+    
+    if (previousPage.isClicked(mouseX, mouseY))
+    {
+      if( pagesOfFlightsScreen!=0)
+      {
+      pagesOfFlightsScreen--;
+      println(pagesOfFlightsScreen);
+      }
     }
   }
 }
