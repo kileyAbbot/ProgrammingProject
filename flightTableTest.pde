@@ -72,6 +72,7 @@ void draw()
 
 	int distanceLowerBracket = 0;
 	int distanceUpperBracket = 5000;
+
 	int startDay = 1;
 	int endDay = 8;
 
@@ -79,6 +80,16 @@ void draw()
 	flightOriginAirports.add("LAX");
 	flightOriginAirports.add("JAX");
 	flightOriginAirports.add("JFK");
+
+    ArrayList <String> flightAirlines = new ArrayList<String>();
+  flightAirlines.add("AS");
+  flightAirlines.add("AA");
+  flightAirlines.add("NK");
+  flightAirlines.add("HA");
+  flightAirlines.add("G4");
+  flightAirlines.add("WN");
+  
+  // to be modfiied by user inputs : LINES 73-90
 	try
 	{
 
@@ -103,16 +114,6 @@ void draw()
 
 	// displayBoxes();
 
-
-
-
-	ArrayList <String> flightAirlines = new ArrayList<String>();
-	flightAirlines.add("AS");
-	flightAirlines.add("AA");
-	flightAirlines.add("NK");
-	flightAirlines.add("HA");
-	flightAirlines.add("G4");
-	flightAirlines.add("WN");
 
 
 
