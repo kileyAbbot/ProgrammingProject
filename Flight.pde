@@ -16,6 +16,7 @@ class Flight
   int actualArrival;
   int isCancelled;
   int isDiverted;
+  
   int distanceTraveledMi;
   int scheduledTimeToTake;
   int actualTimeTaken;
@@ -179,45 +180,20 @@ class Flight
   {
     String totalDate = date;
     String updatedDate = "";
-    for(int i = 0; i < date.length(); i++)
-    {
-      if(date.charAt(i) != '/')
-      {
-        String holder = totalDate.substring(0, i);
-        updatedDate = updatedDate + holder;
-      }
-      else
-      {
-        break;
-      }
-    }
-    int month = Integer.valueOf(updatedDate);
+    String[] monthPart = totalDate.split("/");
+    String numberMonth = monthPart[0];
+    int month = Integer.valueOf(numberMonth);
     return month;
   }
   
  int getFlightDay()
   {
     String totalDate = date;
-    String dayString = "";
-    int startingIndex = 0; 
-    int countOfDash = 0;
     
-    for(int i = 0; i < totalDate.length(); i++)
-    {
-      if(date.charAt(i) == '/')
-      {
-        countOfDash++;
-        startingIndex = i;
-        
-      }
-      else if(totalDate.charAt(i) != '/' && countOfDash == 1)
-      {
-        String holder = totalDate.substring(startingIndex, i);
-        dayString = dayString + holder;
-      }
-      
-    }
-    int day = Integer.parseInt(dayString);
+    String[] dayPart = totalDate.split("/");
+    String numberDay = dayPart[1];
+    
+    int day = Integer.valueOf(numberDay);
     return day;
     
   }
@@ -241,14 +217,6 @@ class Flight
     return hour;
   }
   
-  
-  //int getScheduledDepartureMintue
-  
-  
-  
-  
-  
-  
   String getScheduledDepartureMinute()
   {
     int timeInt = scheduledDeparture;
@@ -264,14 +232,19 @@ class Flight
     else
     {
       timeString = timeString + timeInt;
+      if(timeString.length() == 1)
+      {
+        timeString = "0" + timeString;
+      }
       return timeString;
     }
   }
   
-  int getScheduledArrivalHour()
+  
+  int getActualArrivalHour()
   {
     int hour = 0;
-    int time = scheduledArrival;
+    int time = actualArrival;
     if(time >= 1000)
     {
       hour = time / 100;
@@ -288,9 +261,9 @@ class Flight
   }
   
   
-  String getScheduledArrivalMinute()
+  String getActualArrivalMinute()
   {
-    int timeInt = scheduledArrival;
+    int timeInt = actualArrival;
     String timeString = "";
     while(timeInt > 100)
     {
@@ -303,6 +276,10 @@ class Flight
     else
     {
       timeString = timeString + timeInt;
+      if(timeString.length() == 1)
+      {
+        timeString = "0" + timeString;
+      }
       return timeString;
     }
   }

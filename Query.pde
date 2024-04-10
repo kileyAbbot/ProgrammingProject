@@ -788,6 +788,34 @@ public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flig
 }
 
 
+public static ArrayList<Flight> sortFlightsByScheduledDeparture(ArrayList<Flight> flights)
+{
+    Collections.sort(flights, new Comparator<Flight>() 
+    {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from most early to least early. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least early to most early
+            return Integer.compare( flight1.scheduledDeparture, flight2.scheduledDeparture);  
+        }
+    });
+    return flights;
+}
+
+public static ArrayList<Flight> sortFlightsByActualArrival(ArrayList<Flight> flights)
+{
+    Collections.sort(flights, new Comparator<Flight>() 
+    {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from most early to least early. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least early to most early
+            return Integer.compare(flight1.getActualArrival(), flight2.getActualArrival());  
+        }
+    });
+    return flights;
+}
+
 
 
 public static ArrayList<Flight> getRoutes(ArrayList<Flight> originAirports, ArrayList<Flight> destinationAirports) 

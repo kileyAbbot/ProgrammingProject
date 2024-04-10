@@ -844,6 +844,16 @@ class Button { // added by pratyaksh
     textAlign(CENTER, CENTER);
     text(text, x + w/2, y + h/2);
   }
+  
+  void airportDisplay()
+  {
+    fill(#487edb);
+    rect(x, y, w, h, 5);
+    fill(#FFFCE9);
+    textAlign(CENTER, CENTER);
+    text(text, x + w/2, y + h/2);
+  }
+  
 
   boolean isClicked(int mouseX, int mouseY) { // added by pratyaksh
     return mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h;

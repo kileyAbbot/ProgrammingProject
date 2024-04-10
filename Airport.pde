@@ -1,7 +1,12 @@
-/*To add/fix/change:
+/*
+IMPORTANT TO NOTE:
+to get to airport screen you have to type a three-digit airport code (I use JFK and DCA to test)
+so do something like JFK and hit enter and it should come up with the related screen.
+
+To add/fix/change:
 - where the int YVal is instantiated: make sure that if it overlaps it can go over to a new row, so if it crosses the screen size, it continues in a new column
 - updating search bar to make it more visually appealing, size can best be fixed using the W, H, Y, and Z, as well as the TEXTBOX draw method
-- generate timer to go through list of arrivals/departures
+- make buttons functional
 */
 String airportName;                          
 Flight[] departingFlightsArray;
@@ -18,16 +23,17 @@ public boolean isComplete = false;
 public String msg = "";
 public boolean isPressed = false;
 String cityFromTable;
-int counter = 1;
 
 
+int airportDeparturePage = 0;
+int airportArrivalPage = 0;
 /* Airport class: Used to generate basic information regarding airports, and display it visually onto its own page. Also implements
 search bar tool to filter by airports and display visually. */
 class Airport
 {
   Airport(String departureAirport) 
   {
-    airportName = departureAirport;                                                                                 //Airport name is set based on departure, also captures arrivals
+    airportName = departureAirport;    //Airport name is set based on departure, also captures arrivals
     //place to load in value for airportPhoto (big airports have their own photo, small airports share generic)
     airportPhoto = loadImage("pixelatedDulles.png");                                                                //stock photo of airport in Data file
     //airportPhoto.resize(1280, 800);                                                                                 resizable to the screen if necessary
@@ -125,6 +131,9 @@ Also differentiates between airports in cities where two or more airports are pr
 
    void drawAirportScreen()
    {
+       
+     
+     
         Airport mainAirport = new Airport(msg);
         clear();
   
@@ -153,7 +162,25 @@ Also differentiates between airports in cities where two or more airports are pr
           yIncrement = yIncrement + 33;
           line(10, yIncrement, 1270, yIncrement);
         }
-    
+        
+        textSize(16);
+        Button nextDepartures = new Button("Next", 250, 250, 50, 50);
+        Button nextArrivals = new Button("Next", 800, 250, 50, 50);
+        Button backDepartures = new Button("Back", 300, 250, 50, 50);
+        Button backArrivals = new Button("Back", 850, 250, 50, 50);
+        
+        nextDepartures.airportDisplay();
+        nextArrivals.airportDisplay();
+        if(airportDeparturePage != 0)
+        {
+          backDepartures.airportDisplay();
+        }
+        if(airportArrivalPage != 0)
+        {
+          backArrivals.airportDisplay();
+        }
+        
+        
         //Headers for departure/arrival board, may have to be moved, size updated, and/or font updated.
         PFont mainFont = loadFont("HelveticaNeue-Light-48.vlw");
         textFont(mainFont, 18);
@@ -180,68 +207,94 @@ Also differentiates between airports in cities where two or more airports are pr
         arrivals =  query.getFlightsAssociatedWithDestAirport(flightsInfo, givenAirportName);
         
         //public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, int startDate, int endDate)
-        departures = query.getFlightsOnSpecificDate(departures, 1, 6);
-        arrivals = query.getFlightsOnSpecificDate(arrivals, 1, 6);
+        departures = query.getFlightsOnSpecificDate(departures, 1, 2);
+        arrivals = query.getFlightsOnSpecificDate(arrivals, 1, 2);
     
+        ArrayList<Flight> cancelledDepartures = new ArrayList<Flight>();
+        for(int i = 0; i < departures.size(); i++)
+        {
+          if(departures.get(i).getIsCancelled() == 1)
+          {
+            cancelledDepartures.add(departures.get(i));
+            departures.remove(i);
+          }
+        }
+        
+        ArrayList<Flight> cancelledArrivals = new ArrayList<Flight>();
+        for(int i = 0; i < arrivals.size(); i++)
+        {
+          if(arrivals.get(i).getIsCancelled() == 1)
+          {
+            cancelledArrivals.add(arrivals.get(i));
+            arrivals.remove(i);
+          }
+        }
+        
+        departures = query.sortFlightsByScheduledDeparture(departures);
+        arrivals = query.sortFlightsByActualArrival(arrivals);
+        
+        departures.addAll(cancelledDepartures);
+        arrivals.addAll(cancelledArrivals);        
+            
         //Display time, airline, and other key data related to the departures/arrivals
         int hour;
         String minutes;
         
         //displays hour of departure (stylized), 24h time
-        int yVal = 358;
-        for(int i = 0; i < departures.size(); i++)
-        {
-          if(i < 9)
-          {
-            Flight currFlight = departures.get(i);
-            hour = currFlight.getScheduledDepartureHour();
-            minutes = currFlight.getScheduledDepartureMinute();
-            text(hour + ":" + minutes, 30, yVal);
-            yVal = yVal + 33;
-          }
-        }
-        
-        //displays hour and minute of (scheduled) arrival at destination (stylized)
-        yVal = 358;
-        for(int i = 0; i < arrivals.size(); i++)
-        {
-          if(i < 9)
-          {
-            Flight currFlight = departures.get(i);
-            hour = currFlight.getScheduledArrivalHour();
-            minutes = currFlight.getScheduledArrivalMinute();
-            text(hour + ":" + minutes, 150, yVal);
-            yVal = yVal + 33;
-          }
-        }
-        
-        //displays destination city (departure) (stylized)    
-        yVal = 358;
         String destinationCity = "";
-        for(int i = 0; i < departures.size(); i++)
-        {
-          if(i < 9)
-          {
-            Flight currFlight = departures.get(i);
-            destinationCity = currFlight.getDestinationCity();
-            text(destinationCity, 400, yVal);
-            yVal = yVal + 33;
-          }
-        }
-        
-        //displays airline (could be made into full name, not abbreviation)
-        yVal = 358;
         String airline = "";
+        int yVal = 358;
+        int yValArrivals = 358;
+        int yValDestination = 358;
+        int yValAirline = 358;
         for(int i = 0; i < departures.size(); i++)
         {
-          if(i < 9)
+            if(nextDepartures.isClicked(mouseX, mouseY))
+            {
+              i = i + 8;
+              airportDeparturePage++;
+          }  
+          else if (backDepartures.isClicked(mouseX, mouseY))
           {
-            Flight currFlight = departures.get(i);
-            airline = currFlight.getAirline();
-            text(airline, 580, yVal);
-            yVal = yVal + 33;
+            airportDeparturePage--;
+            if(i - 8 < 0)
+            {
+              i = 0;
+            }
+            else
+            {
+              i = i - 8;
+            }
+            if(airportDeparturePage  < 0)
+            {
+              airportDeparturePage = 0;
+            }
           }
-        }
+              Flight currFlight = departures.get(i);
+              hour = currFlight.getScheduledDepartureHour();
+              minutes = currFlight.getScheduledDepartureMinute();
+              text(hour + ":" + minutes, 30, yVal);
+              yVal = yVal + 33;
+            
+             //displays hour and minute of (scheduled) arrival at destination (stylized)
+              
+              hour = currFlight.getActualArrivalHour();
+              minutes = currFlight.getActualArrivalMinute();
+              text(hour + ":" + minutes, 150, yValArrivals);
+              yValArrivals = yValArrivals + 33;
+            
+            
+              destinationCity = currFlight.getDestinationCity();
+              text(destinationCity, 400, yValDestination);
+              yValDestination = yValDestination + 33;
+                
+              airline = currFlight.getAirline();
+              text(airline, 580, yVal);
+              yValAirline = yValAirline + 33;
+           
+          }
+
+
     
         //displays arrival (origin airport) stylized
         yVal = 358;
@@ -250,10 +303,18 @@ Also differentiates between airports in cities where two or more airports are pr
           if(i < 9)
           {
             Flight currFlight = arrivals.get(i);
-            hour = currFlight.getScheduledArrivalHour();
-            minutes = currFlight.getScheduledArrivalMinute();
-            text(hour + ":" + minutes, 655, yVal);
-            yVal = yVal + 33;
+            if(currFlight.getIsCancelled() == 0)
+            {
+              hour = currFlight.getActualArrivalHour();
+              minutes = currFlight.getActualArrivalMinute();
+              text(hour + ":" + minutes, 655, yVal);
+              yVal = yVal + 33;
+            }
+            else
+            {
+              text("Cancelled", 655, yVal);
+              yVal = yVal + 33;
+            }
           }
         }
         
