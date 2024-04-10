@@ -780,11 +780,28 @@ void mousePressed() { // added by pratyaksh.
 				return;
 			}
 		}
-	} else {
+	}
+  else if(screenState == 4)
+  {
+    airportSearchBar.PRESSED(mouseX, mouseY);
+    airportDay.PRESSED(mouseX, mouseY);
+    airportMonth.PRESSED(mouseX, mouseY);
+    for(int i = 0; i < airportsSearched.size(); i++)
+    {
+      if(airportsSearched.get(i).isClicked(mouseX, mouseY))
+      {
+        citySelected = airportsSearched.get(i).text;
+        fullCityString = citySelected;
+        citySelected = citySelected.substring(citySelected.length() - 4, citySelected.length() - 1);
+        airportFound = true;
+      }
+    }
+  } 
+else {
 		if (backButton.isClicked(mouseX, mouseY)) {
 			// // clear(); // // clear the graph before going back to the buttons
 			screenState = 0;
-			if (screenState==4)
+			if (screenState==5)      //line worth inspecting,
 			{
 				pagesOfFlightsScreen = -1; 
 			}

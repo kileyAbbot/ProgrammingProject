@@ -3,10 +3,10 @@ public class TEXTBOX {
    public int TEXTSIZE = 24;
    
    // COLORS
-   public color Background = color(140, 140, 140);
-   public color Foreground = color(0, 0, 0);
-   public color BackgroundSelected = color(160, 160, 160);
-   public color Border = color(30, 30, 30);
+   public color Background = color(#eae8eb);
+   public color Foreground = color(#eae8eb);
+   public color BackgroundSelected = color(#cdcacf);
+   public color Border = color(#eae8eb);
    
    public boolean BorderEnable = false;
    public int BorderWeight = 1;
@@ -14,7 +14,7 @@ public class TEXTBOX {
    public String Text = "";
    public int TextLength = 0;
 
-   private boolean selected = true;
+   private boolean selected = false;
    
    TEXTBOX() {
       // CREATE OBJECT DEFAULT TEXTBOX
@@ -27,14 +27,14 @@ public class TEXTBOX {
    void DRAW() {
       // DRAWING THE BACKGROUND
       if (selected) {
-         fill(BackgroundSelected);
+         fill(#eae8eb);
       } else {
-         fill(Background);
+         fill(#eae8eb);
       }
       
       if (BorderEnable) {
          strokeWeight(BorderWeight);
-         stroke(Border);
+         stroke(#eae8eb);
       } else {
          noStroke();
       }
@@ -42,9 +42,9 @@ public class TEXTBOX {
       rect(X, Y, W, H);
       
       // DRAWING THE TEXT ITSELF
-      fill(Foreground);
+      fill(#64a4cc);
       textSize(TEXTSIZE);
-      text(Text, X + (textWidth("a") / 2), Y + TEXTSIZE);
+      text(Text, X + (textWidth(Text) / 2) + 5, Y + TEXTSIZE - 5);
    }
    
    // IF THE KEYCODE IS ENTER RETURN 1
@@ -109,11 +109,11 @@ public class TEXTBOX {
       return false;
    }
    
-   /*void PRESSED(int x, int y) {
+   void PRESSED(int x, int y) {
       if (overBox(x, y)) {
          selected = true;
       } else {
          selected = false;
       }
-   }*/
+   }
 }
