@@ -72,6 +72,7 @@ void draw()
 
 	int distanceLowerBracket = 0;
 	int distanceUpperBracket = 5000;
+
 	int startDay = 1;
 	int endDay = 8;
 
@@ -79,6 +80,16 @@ void draw()
 	flightOriginAirports.add("LAX");
 	flightOriginAirports.add("JAX");
 	flightOriginAirports.add("JFK");
+
+    ArrayList <String> flightAirlines = new ArrayList<String>();
+  flightAirlines.add("AS");
+  flightAirlines.add("AA");
+  flightAirlines.add("NK");
+  flightAirlines.add("HA");
+  flightAirlines.add("G4");
+  flightAirlines.add("WN");
+  
+  // to be modfiied by user inputs : LINES 73-90
 	try
 	{
 
@@ -103,16 +114,6 @@ void draw()
 
 	// displayBoxes();
 
-
-
-
-	ArrayList <String> flightAirlines = new ArrayList<String>();
-	flightAirlines.add("AS");
-	flightAirlines.add("AA");
-	flightAirlines.add("NK");
-	flightAirlines.add("HA");
-	flightAirlines.add("G4");
-	flightAirlines.add("WN");
 
 
 
@@ -414,6 +415,57 @@ void displayDescriptiveStatistics( ArrayList flightsSet )
 	standardDeviationString+="Standard deviation of distance travelled by flights in miles : " + standardDeviation;
 	textSize(20);
 	text(standardDeviationString, SCREEN_X/2, 350 );
+
+   String cancelledFlightString = "";
+  int cancelledFlights = query.getCancelledFlights(flightsInfo).size();
+  cancelledFlightString += "number of cancelled flights: " + cancelledFlights;
+  text(cancelledFlightString, SCREEN_X/2, 400 );
+  
+  String divertedFlightString = "";
+  int divertedFlights = query.getDivertedFlights(flightsInfo).size();
+  divertedFlightString += "number of diverted flights: " + divertedFlights;
+  text(divertedFlightString, SCREEN_X/2, 450 );
+  
+  String busiestAirportString = "";
+  ArrayList<ArrayList<String>> busiestAirport = query.airportsSortedByMostOutgoingFlights ( flightsInfo);
+  busiestAirportString += "The busiest airport in the set is " + busiestAirport.get(0).get(0) + " with " + busiestAirport.get(0).get(1) + " flights";
+  text(busiestAirportString, SCREEN_X/2, 500 );
+  
+  String busiestAirlineString = "";
+  ArrayList<ArrayList<String>> busiestAirline = query.airlinesSortedByMostOutgoingFlights ( flightsInfo);
+  busiestAirlineString += "The busiest airline in the set is " + busiestAirline.get(0).get(0) + " with " + busiestAirline.get(0).get(1) + " flights";
+  text(busiestAirlineString, SCREEN_X/2, 550 );
+  
+  String busiestCityString = "";
+  ArrayList<ArrayList<String>> busiestCity = query.citiesSortedByMostOutgoingFlights ( flightsInfo);
+  busiestCityString += "The busiest city in the set is " + busiestCity.get(0).get(0) + " with " + busiestCity.get(0).get(1) + " flights";
+  text(busiestCityString, SCREEN_X/2, 600 );
+  
+  String busiestStateString = "";
+  ArrayList<ArrayList<String>> busiestState = query.busiestStatesInSet ( flightsInfo);
+  busiestStateString += "The busiest state in the set is " + busiestState.get(0).get(0) + " with " + busiestState.get(0).get(1) + " flights";
+  text(busiestStateString, SCREEN_X/2, 650 );
+  
+  String fastestFlightString = "";
+  ArrayList<Flight> fastestFlight = query.getFastestFlights( flightsInfo );
+  fastestFlightString += "The fastest average speed of any flight is traveling at " + fastestFlight.get(0).flightAverageSpeed + " miles per hour. It traveled " + fastestFlight.get(0).distanceTraveledMi + " miles in ";
+  fastestFlightString += query.putTimeIntoHoursAndMinutes(fastestFlight.get(0).actualTimeTakenInMinutes);
+  text(fastestFlightString, SCREEN_X/2, 700 );
+  
+  String quickestTimeString = "";
+  int minTimeInMinutes = 2;
+  int maxTimeInMinutes = 1440;
+  ArrayList<Flight> quickestTime = query.getQuickestTimeFlightsWithinRange(flightsInfo, minTimeInMinutes, maxTimeInMinutes);
+  quickestTimeString += "The shortest duration flight was " + query.putTimeIntoHoursAndMinutes(quickestTime.get(0).actualTimeTakenInMinutes);
+  quickestTimeString += " The longest duration flight was " + query.putTimeIntoHoursAndMinutes(quickestTime.get(quickestTime.size() - 1).actualTimeTakenInMinutes);
+  text(quickestTimeString, SCREEN_X/2, 750 );
+  
+  String FirstAndLastFlights = "";
+  ArrayList<Flight> FlightsInChronologicalOrder = query.getFirstFlightsScheduledBetweenAirports (flightsInfo);
+  FirstAndLastFlights += "The first flight in this set was on the " + FlightsInChronologicalOrder.get(0).flightDay + "/1/2022 at " + query.convertTo24HourFormat(FlightsInChronologicalOrder.get(0).actualDeparture);
+  FirstAndLastFlights += ". The last flight in this set was on the " + FlightsInChronologicalOrder.get(FlightsInChronologicalOrder.size() - 1).flightDay + "/1/2022 at " + query.convertTo24HourFormat(FlightsInChronologicalOrder.get(FlightsInChronologicalOrder.size() - 1).actualDeparture);
+  text(FirstAndLastFlights, SCREEN_X/2, 800 );
+  
 
 }
 
