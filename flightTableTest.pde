@@ -1,6 +1,6 @@
 import java.util.Scanner;
 Table flightTable;
-ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
+public ArrayList <Flight> flightsInfo = new ArrayList<Flight>();
 PFont flightSearchTableFont;
 final int SCREEN_X = 1920;
 final int SCREEN_Y = 1080;
@@ -30,6 +30,7 @@ void setup()
   graphButtons.add(new Button("Line Chart, frequency of flights on particular days", width/2 - 150, 200, 300, 50));
   graphButtons.add(new Button("Descriptive Statistics", width/2 - 150, 300, 300, 50));
   graphButtons.add(new Button("Flight search", width/2 - 150, 400, 300, 50));
+  graphButtons.add(new Button("Airport Overview", width/2 - 150, 500, 300, 50));
   // Add other buttons as needed
   
   flightTable = loadTable("flights2kCSV.csv", "header");
@@ -64,74 +65,7 @@ void draw()
   
   background(120);
   textSize(8);
-  
-  /* //Kiley -- Testing airport class & how it draws)
-    Airport dulles = new Airport("IAD");
-    PImage airportPhoto;
-    PFont headerFont;
-    airportPhoto = loadImage("pixelatedDulles.png");
-    airportPhoto.resize(1280, 800);
-  
-  
-    headerFont = loadFont("HelveticaNeue-Thin-48.vlw");
-    textFont(headerFont, 48);
-    
-    fill(#FFFCE9);
-    image(airportPhoto, 0, 0);
-    text(airportName, 370, 50);
-    
-    //DepartureBoard
-    color boardColor = get(100, 200);
-    fill(boardColor, 200);
-     
-    stroke(#eae8eb);
-    rect(10, 300, 630, 330);
-    rect(640, 300, 630, 330);
-    fill(#64a4cc);
-    rect(10, 300, 1260, 33);
-    int yIncrement = 300;
-    for(int lineCount = 10; lineCount > 0; lineCount--)
-    {
-      yIncrement = yIncrement + 33;
-      line(10, yIncrement, 1270, yIncrement);
-    }
-    
-    //Headers
-    PFont mainFont = loadFont("HelveticaNeue-Light-48.vlw");
-    textFont(mainFont, 18);
-    fill(#eae8eb);
-    text("Departure Time", 15, 325); 
-    text("Arrival (Scheduled)", 150, 325);
-    text("Destination City", 400, 325);
-    
-    text("Arrival Time", 655, 325);
-    text("Status", 805, 325);
-    text("Arriving From", 1010, 325);
-    
-    ArrayList<Flight> departures = dulles.returnDepartingFlights();
-    ArrayList<Flight> arrivals = dulles.returnArrivingFlights();
-    
-    
-    int hour;
-    int minutes;
-    int yVal = 358;
-    for(int i = 0; i < 10; i++)
-    {
-      Flight currFlight = departures.get(i);
-      hour = currFlight.getScheduledDepartureHour();
-      //add minute method
-      text(hour, 15, yVal);
-      yVal = yVal + 33;
-    }
-    */
-    
-    //to do: timer, statistics, center text
-    
-    
-    
-    //end of my test section for airport
  
- ////////// USING QUERIES LINES 45-62 
 
  ArrayList<Flight> flightsSorted = new ArrayList<Flight>();
  
@@ -148,9 +82,6 @@ void draw()
   try
   {
     
-   
- 
-  
   
   
   flightsSorted = query.getFlightsWithinDistanceRange( flightsInfo, distanceLowerBracket, distanceUpperBracket );
@@ -212,6 +143,13 @@ void draw()
     displayFlightSearch( flightsSorted );
     backButton.display();
   }
+  else if(screenState == 4)
+  {
+    clear();    
+    background(120);      //set background for airport search, change to something more modern
+    drawSearch();         //draws search, invokes method to display airport inside drawSearch method
+  }
+  
   
     }
    
@@ -868,6 +806,23 @@ void mousePressed() { // added by pratyaksh.
     }
   }
 }
+
+
+ArrayList<Flight> returnFlightArray()
+{
+  return flightsInfo;
+}
+
+
+   void keyPressed()
+   {
+     if(screenState == 4)
+     {
+        isPressedForTextBox();
+     }
+   }
+  
+
 
 class Button { // added by pratyaksh
   String text;

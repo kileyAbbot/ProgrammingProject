@@ -148,6 +148,21 @@ public static class query
         return flightsWithinDateRange;
     }
     
+    public static ArrayList<Flight> getFlightsOnSpecificDate(ArrayList<Flight> flights, int flightMonth, int flightDay)
+    {
+        ArrayList<Flight> flightsOnDay = new ArrayList<>();   
+        for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          if ( flights.get(i).getFlightMonth() == flightMonth && flights.get(i).getFlightDay() == flightDay )
+          {
+            flightsOnDay.add( flights.get(i) );
+          }
+        }
+        return flightsOnDay;
+    }
+    
+    
+    
          public static ArrayList<Flight> getFlightsWithinActualTimeRange(ArrayList<Flight> flights, int startTime, int endTime)
     {
         ArrayList<Flight> flightsWithinTimeRange = new ArrayList<>();   
@@ -771,6 +786,8 @@ public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flig
     });
     return earlyFlights;
 }
+
+
 
 
 public static ArrayList<Flight> getRoutes(ArrayList<Flight> originAirports, ArrayList<Flight> destinationAirports) 

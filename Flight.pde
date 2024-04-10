@@ -175,15 +175,15 @@ class Flight
     return distanceTraveledMi;
   }
   
-  int getFlightMonth(Flight flightForDate)
+  int getFlightMonth()
   {
-    String totalDate = flightForDate.getDate();
+    String totalDate = date;
     String updatedDate = "";
     for(int i = 0; i < date.length(); i++)
     {
       if(date.charAt(i) != '/')
       {
-        String holder = totalDate.substring(i);
+        String holder = totalDate.substring(0, i);
         updatedDate = updatedDate + holder;
       }
       else
@@ -197,37 +197,42 @@ class Flight
   
  int getFlightDay()
   {
-
+    String totalDate = date;
     String dayString = "";
-    int charNumber = 0; 
+    int startingIndex = 0; 
+    int countOfDash = 0;
     
-    while ( this.date.charAt(charNumber) != '/' )
+    for(int i = 0; i < totalDate.length(); i++)
     {
-      charNumber++;
+      if(date.charAt(i) == '/')
+      {
+        countOfDash++;
+        startingIndex = i;
+        
+      }
+      else if(totalDate.charAt(i) != '/' && countOfDash == 1)
+      {
+        String holder = totalDate.substring(startingIndex, i);
+        dayString = dayString + holder;
+      }
+      
     }
-    charNumber++;
-    
-    while ( this.date.charAt(charNumber) != '/' )
-    {
-      dayString+=this.date.charAt(charNumber++);
-    }
-    
     int day = Integer.parseInt(dayString);
     return day;
     
   }
   
-  int getScheduledDepartureHour(Flight flightHour)
+  int getScheduledDepartureHour()
   {
     int hour = 0;
-    int time = flightHour.getScheduledDeparture();
+    int time = scheduledDeparture;
     if(time >= 1000)
     {
       hour = time / 100;
     }
     else if(time >= 100)
     {
-      hour = time / 10;
+      hour = time / 100;
     }
     else
     {
@@ -237,9 +242,76 @@ class Flight
   }
   
   
-  boolean flightCancelled(Flight flightCancel)
+  //int getScheduledDepartureMintue
+  
+  
+  
+  
+  
+  
+  String getScheduledDepartureMinute()
   {
-    if(flightCancel.getIsCancelled() == 1)
+    int timeInt = scheduledDeparture;
+    String timeString = "";
+    while(timeInt > 100)
+    {
+      timeInt = timeInt - 100;
+    }
+    if(timeInt == 100)
+    {
+     return timeString = "00";
+    }
+    else
+    {
+      timeString = timeString + timeInt;
+      return timeString;
+    }
+  }
+  
+  int getScheduledArrivalHour()
+  {
+    int hour = 0;
+    int time = scheduledArrival;
+    if(time >= 1000)
+    {
+      hour = time / 100;
+    }
+    else if(time >= 100)
+    {
+      hour = time / 100;
+    }
+    else
+    {
+      hour = 0;
+    }
+    return hour;
+  }
+  
+  
+  String getScheduledArrivalMinute()
+  {
+    int timeInt = scheduledArrival;
+    String timeString = "";
+    while(timeInt > 100)
+    {
+      timeInt = timeInt - 100;
+    }
+    if(timeInt == 100)
+    {
+     return timeString = "00";
+    }
+    else
+    {
+      timeString = timeString + timeInt;
+      return timeString;
+    }
+  }
+  
+  
+  
+  boolean flightCancelled()
+  {
+    if(isCancelled == 1)
     {
       return true;
     }
@@ -249,9 +321,9 @@ class Flight
     }
   }
   
-  boolean flightDiverted(Flight flightDiv)
+  boolean flightDiverted()
   {
-    if(flightDiv.getIsDiverted() == 1)
+    if(isDiverted == 1)
     {
       return true;
     }
