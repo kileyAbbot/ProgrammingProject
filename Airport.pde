@@ -7,6 +7,7 @@ To add/fix/change:
 - where the int YVal is instantiated: make sure that if it overlaps it can go over to a new row, so if it crosses the screen size, it continues in a new column
 - updating search bar to make it more visually appealing, size can best be fixed using the W, H, Y, and Z, as well as the TEXTBOX draw method
 - make buttons functional
+- ADD A DATE SEARCH!
 */
 String airportName;                          
 Flight[] departingFlightsArray;
@@ -14,7 +15,7 @@ ArrayList<Flight> arrivalFlights;
 ArrayList<Flight> departingFlights;
 PImage airportPhoto;
 PFont headerFont;
-ArrayList<Flight> flightList = returnFlightArray();
+ArrayList<Flight> flightList = flightsInfo;
 
 
 Airport currAirport;
