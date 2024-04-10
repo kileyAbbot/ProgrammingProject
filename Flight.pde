@@ -14,17 +14,21 @@ class Flight
   int actualDeparture;
   int scheduledArrival;
   int actualArrival;
+  int actualDepartureInMinutes;
+  int scheduledDepartureInMinutes;
+  int actualArrivalInMinutes;
+  int scheduledArrivalInMinutes;
   int isCancelled;
   int isDiverted;
-  
   int distanceTraveledMi;
-  int scheduledTimeToTake;
-  int actualTimeTaken;
-  int lateness;
-  int earliness;
+  int scheduledTimeToTakeInMinutes;
+  int actualTimeTakenInMinutes;
+  int departureLateness;
+  int departureEarliness;
   int arrivalLateness;
   int arrivalEarliness;
   int flightDay;
+  double flightAverageSpeed;
   
   Flight(String date, String airline, String originAirport, String originCity, String originState, int originWAC, String destinationAirport, String destinationCity, String destinationState,
   int destinationWAC, int scheduledDept, int actualDept, int scheduledArr, int actualArr, int isCancelled, int isDiverted, int distanceTraveledMi)
@@ -43,24 +47,25 @@ class Flight
     actualDeparture = actualDept;
     scheduledArrival = scheduledArr;
     actualArrival = actualArr;
+    scheduledDepartureInMinutes = query.getActualTimeInMinutes(scheduledDeparture);
+    actualDepartureInMinutes = query.getActualTimeInMinutes(actualDeparture);
+    scheduledArrivalInMinutes = query.getActualTimeInMinutes(scheduledArrival);
+    actualArrivalInMinutes = query.getActualTimeInMinutes(actualArrival);
     this.isCancelled = isCancelled;
     this.isDiverted = isDiverted;
     this.distanceTraveledMi = distanceTraveledMi;
-    this.lateness = query.properTimeTaken(actualDeparture, scheduledDeparture);
-    this.earliness = query.properTimeTaken(scheduledDeparture, actualDeparture);
-    this.scheduledTimeToTake = query.properTimeTaken(scheduledArrival,scheduledDeparture);
-    this.actualTimeTaken = query.properTimeTaken(actualArrival, actualDeparture);
-    this.flightDay = getFlightDay();
-    lateness = query.properTimeTaken(actualDeparture, scheduledDeparture);
-    earliness = query.properTimeTaken(scheduledDeparture, actualDeparture);
-    arrivalLateness = query.properTimeTaken(actualArrival, scheduledArrival);
-    arrivalEarliness = query.properTimeTaken(actualArrival, scheduledArrival);
-    scheduledTimeToTake = query.properTimeTaken(scheduledArrival,scheduledDeparture);
-    actualTimeTaken = query.properTimeTaken(actualArrival, actualDeparture);
+    departureLateness = query.actualLateOrEarliness(scheduledDepartureInMinutes, actualDepartureInMinutes);
+    departureEarliness = query.actualLateOrEarliness( actualDepartureInMinutes, scheduledDepartureInMinutes);
+    arrivalLateness = query.actualLateOrEarliness(scheduledArrivalInMinutes, actualArrivalInMinutes);
+    arrivalEarliness = query.actualLateOrEarliness(actualArrivalInMinutes, scheduledArrivalInMinutes);
+    scheduledTimeToTakeInMinutes = query.properTimeTaken(scheduledArrivalInMinutes,scheduledDepartureInMinutes);
+    actualTimeTakenInMinutes = query.properTimeTaken(actualDepartureInMinutes, actualArrivalInMinutes);
     flightDay = getFlightDay();
+    flightAverageSpeed = getAverageSpeed();
+    System.out.println(flightAverageSpeed);
   }
   
-  String printFlight()
+   String printFlight()
   {
     String cancelledStatus = "";
     String divertedStatus = "";
@@ -308,6 +313,19 @@ class Flight
     {
       return false;
     }
+  }
+    
+  double getAverageSpeed()
+  {
+      if (actualTimeTakenInMinutes <= 0 || distanceTraveledMi <= 0 ) 
+    {
+      flightAverageSpeed = 0;
+    }
+    else 
+    {
+      flightAverageSpeed = (double) distanceTraveledMi/ ((double)actualTimeTakenInMinutes / 60);
+    }
+    return flightAverageSpeed;
   }
   
   String decodeAirline(Flight plane)

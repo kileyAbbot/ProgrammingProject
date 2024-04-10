@@ -6,7 +6,7 @@ import java.util.Set;
 public static class query
 {
    
-  public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, ArrayList<String> originAirports)
+  public static ArrayList<Flight> getFlightsAssociatedWithOriginAirport(ArrayList<Flight> flights, ArrayList<String> originAirports) //Jake
     {
         String flightAirport;
         String flightAirportForComparison;
@@ -28,7 +28,7 @@ public static class query
         return flightsAssociatedWithAirports;
     }
     
-       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, ArrayList<String> destinationAirports)
+       public static ArrayList<Flight> getFlightsAssociatedWithDestAirport(ArrayList<Flight> flights, ArrayList<String> destinationAirports)//Jake
     {
         String flightAirport;
         String flightAirportForComparison;
@@ -50,7 +50,7 @@ public static class query
         return flightsAssociatedWithAirports;
     }
     
-    public static ArrayList<Flight> getFlightsAssociatedWithOriginCity(ArrayList<Flight> flights, ArrayList<String> originCities)
+    public static ArrayList<Flight> getFlightsAssociatedWithOriginCity(ArrayList<Flight> flights, ArrayList<String> originCities)  //Fiachra
     {
         String flightCity;
         String flightCityForComparison;
@@ -71,7 +71,7 @@ public static class query
         return flightsAssociatedWithCity;
     }
     
-     public static ArrayList<Flight> getFlightsAssociatedWithDestinationCity(ArrayList<Flight> flights, ArrayList<String> destinationCities)
+     public static ArrayList<Flight> getFlightsAssociatedWithDestinationCity(ArrayList<Flight> flights, ArrayList<String> destinationCities)//Fiachra
     {
         String flightCity;
         String flightCityForComparison;
@@ -92,8 +92,29 @@ public static class query
         return flightsAssociatedWithCity;
     }
     
+        public static ArrayList<Flight> getFlightsAssociatedWithDestinationState(ArrayList<Flight> flights, ArrayList<String> destinationStates)//Jake
+    {
+        String flightState;
+        String flightStateForComparison;
+        ArrayList<Flight> flightsAssociatedWithState = new ArrayList<>();
+         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
+        {
+          for ( int a = 0; a < destinationStates.size(); a++ )
+          {
+            flightState = flights.get(i).destinationState;
+            flightStateForComparison = destinationStates.get(a);
+            if ( flightState.equals(flightStateForComparison) )
+            {
+              flightsAssociatedWithState.add(flights.get(i));
+            }
+          }
+ 
+        }
+        return flightsAssociatedWithState;
+    }
+    
    
-      public static ArrayList<Flight>  getFlightsAssociatedWithOriginState(ArrayList<Flight> flights, ArrayList<String> originStates)
+      public static ArrayList<Flight> getFlightsAssociatedWithOriginState(ArrayList<Flight> flights, ArrayList<String> originStates)//Jake
     {
         String flightState;
         String flightStateForComparison;
@@ -114,7 +135,7 @@ public static class query
         return flightsAssociatedWithState;
     }
     
-    public static ArrayList<Flight> getFlightsAssociatedWithAirline(ArrayList<Flight> flights, ArrayList<String> airlines)
+    public static ArrayList<Flight> getFlightsAssociatedWithAirline(ArrayList<Flight> flights, ArrayList<String> airlines)//Fiachra
     {
         String flightAirline;
         String flightAirlineForComparison;
@@ -135,7 +156,7 @@ public static class query
         return flightsAssociatedWithAirline;
     }
    
-      public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, int startDate, int endDate)
+      public static ArrayList<Flight> getFlightsWithinDateRange(ArrayList<Flight> flights, int startDate, int endDate)  //Fiachra
     {
         ArrayList<Flight> flightsWithinDateRange = new ArrayList<>();   
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -148,7 +169,7 @@ public static class query
         return flightsWithinDateRange;
     }
     
-    public static ArrayList<Flight> getFlightsOnSpecificDate(ArrayList<Flight> flights, int flightMonth, int flightDay)
+        public static ArrayList<Flight> getFlightsOnSpecificDate(ArrayList<Flight> flights, int flightMonth, int flightDay) //Fiachra
     {
         ArrayList<Flight> flightsOnDay = new ArrayList<>();   
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -161,9 +182,7 @@ public static class query
         return flightsOnDay;
     }
     
-    
-    
-         public static ArrayList<Flight> getFlightsWithinActualTimeRange(ArrayList<Flight> flights, int startTime, int endTime)
+         public static ArrayList<Flight> getFlightsWithinActualTimeRange(ArrayList<Flight> flights, int startTime, int endTime) //Fiachra
     {
         ArrayList<Flight> flightsWithinTimeRange = new ArrayList<>();   
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -185,7 +204,7 @@ public static class query
         return flightsWithinTimeRange;
     }
     
-       public static ArrayList<Flight> getFlightsWithinScheduledTimeRange(ArrayList<Flight> flights, int startTime, int endTime)
+       public static ArrayList<Flight> getFlightsWithinScheduledTimeRange(ArrayList<Flight> flights, int startTime, int endTime) //Fiachra
     {
         ArrayList<Flight> flightsWithinTimeRange = new ArrayList<>();   
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -209,7 +228,7 @@ public static class query
     
     
    
-     public static ArrayList<Flight> getCancelledFlights(ArrayList<Flight> flights)
+     public static ArrayList<Flight> getCancelledFlights(ArrayList<Flight> flights) //Fiachra
      {
         ArrayList<Flight> cancelledFlights = new ArrayList<>();
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -223,7 +242,7 @@ public static class query
         return cancelledFlights;
      }
      
-     public static ArrayList<Flight> getDivertedFlights(ArrayList<Flight> flights)
+     public static ArrayList<Flight> getDivertedFlights(ArrayList<Flight> flights) //Fiachra
      {
         ArrayList<Flight> divertedFlights = new ArrayList<>();
         for (int i = 0; i < flights.size(); i++) //iterates over each element in the flights ArrayList
@@ -261,7 +280,7 @@ public static class query
     return flightsWithinDistanceRange;
     }
 
-public static ArrayList<String> getAllAirports(ArrayList<Flight> flights) 
+public static ArrayList<String> getAllAirports(ArrayList<Flight> flights) //Fiachra
 {
     Set<String> airportSet = new HashSet<>();     // Use a HashSet to prevent adding duplicates. 
     for (Flight flight : flights) 
@@ -272,7 +291,7 @@ public static ArrayList<String> getAllAirports(ArrayList<Flight> flights)
     return new ArrayList<>(airportSet);
 }
 
-public static ArrayList<String> getAllStates(ArrayList<Flight> flights) 
+public static ArrayList<String> getAllStates(ArrayList<Flight> flights) //Jake
 {
     Set<String> statesSet = new HashSet<>();     // Use a HashSet to prevent adding duplicates. 
     for (Flight flight : flights) 
@@ -284,7 +303,7 @@ public static ArrayList<String> getAllStates(ArrayList<Flight> flights)
     return new ArrayList<>(statesSet);
 }
 
-public static ArrayList<String> getAllCities(ArrayList<Flight> flights) 
+public static ArrayList<String> getAllCities(ArrayList<Flight> flights) //Fiachra
 {
     Set<String> citySet = new HashSet<>();     // Use a HashSet to prevent adding duplicates. 
     for (Flight flight : flights) 
@@ -295,7 +314,7 @@ public static ArrayList<String> getAllCities(ArrayList<Flight> flights)
     return new ArrayList<>(citySet);
 }
 
-public static ArrayList<String> getAllAirlines(ArrayList<Flight> flights) 
+public static ArrayList<String> getAllAirlines(ArrayList<Flight> flights) //Fiachra
 {
     Set<String> airlineSet= new HashSet<>();     // Use a HashSet to prevent adding duplicates. 
     for (Flight flight : flights) 
@@ -307,35 +326,35 @@ public static ArrayList<String> getAllAirlines(ArrayList<Flight> flights)
 }
 
 
-public static int getTotalFlightsFromAirport( ArrayList<Flight> flights, ArrayList<String> originAirports)
+public static int getTotalFlightsFromAirport( ArrayList<Flight> flights, ArrayList<String> originAirports) //Fiachra
 {
    ArrayList<Flight> FlightsFromAirport = query.getFlightsAssociatedWithOriginAirport(flights, originAirports);
    int count = FlightsFromAirport.size();
    return count;
 }
 
-public static int getTotalFlightsFromCity( ArrayList<Flight> flights, ArrayList<String> originCities )
+public static int getTotalFlightsFromCity( ArrayList<Flight> flights, ArrayList<String> originCities )//Fiachra
 {
    ArrayList<Flight> FlightsFromCity = query.getFlightsAssociatedWithOriginCity (flights, originCities);
    int count = FlightsFromCity.size();
    return count;
 }
 
-public static int getTotalFlightsFromState( ArrayList<Flight> flights, ArrayList<String> originStates )
+public static int getTotalFlightsFromState( ArrayList<Flight> flights, ArrayList<String> originStates ) //Jake
 {
    ArrayList<Flight> FlightsFromState = query.getFlightsAssociatedWithOriginState (flights, originStates);
    int count = FlightsFromState.size();
    return count;
 }
 
-public static int getTotalFlightsFromAirline( ArrayList<Flight> flights, ArrayList<String> airlines)
+public static int getTotalFlightsFromAirline( ArrayList<Flight> flights, ArrayList<String> airlines) //Fiachra
 {
    ArrayList<Flight> FlightsFromAirline = query.getFlightsAssociatedWithAirline(flights, airlines);
    int count = FlightsFromAirline.size();
    return count;
 }
 
-public static ArrayList<ArrayList<String>> airportsSortedByMostOutgoingFlights (ArrayList<Flight> flights)
+public static ArrayList<ArrayList<String>> airportsSortedByMostOutgoingFlights (ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<String> airportsInArrayList =  getAllAirports(flights);
     ArrayList<ArrayList<String>> airportFlights = new ArrayList<>(); //2d arrayList/ arrayList of arrayList of strings (column 0 stores airport, column 1 total flights as string)
@@ -365,7 +384,7 @@ public static ArrayList<ArrayList<String>> airportsSortedByMostOutgoingFlights (
    return airportFlights;
 }
 
-public static ArrayList<ArrayList<String>> airlinesSortedByMostOutgoingFlights (ArrayList<Flight> flights)
+public static ArrayList<ArrayList<String>> airlinesSortedByMostOutgoingFlights (ArrayList<Flight> flights)  //fiachra
 {
     ArrayList<String> airlinesInArrayList =  getAllAirlines(flights);
     ArrayList<ArrayList<String>> airlineFlights = new ArrayList<>(); //2d arrayList/ arrayList of arrayList of strings (column 0 stores airport, column 1 total flights as string)
@@ -435,35 +454,7 @@ public static ArrayList<ArrayList<String>> airlinesSortedByMostOutgoingFlights (
         return stateFlights;
     }
    
-    public static ArrayList<ArrayList<String>> busiestAirportsInSet (ArrayList<Flight> flights)
-{
-    ArrayList<String> airportsInArrayList =  getAllAirports(flights);
-    ArrayList<ArrayList<String>> airportFlights = new ArrayList<>(); //2d arrayList/ arrayList of arrayList of strings (column 0 stores airport, column 1 total flights as string)
-    for ( int i =0; i < airportsInArrayList.size(); i++)
-    {
-      String airport = airportsInArrayList.get(i);
-      ArrayList<String> airportInfo = new ArrayList<>();
-      airportInfo.add(airport); // Add airport name
-      airportInfo.add(Integer.toString(getTotalFlightsFromAirport(flights, airportInfo)));
-      airportFlights.add(airportInfo);
-    }
-    Collections.sort(airportFlights, new Comparator<ArrayList<String>>()
-    {
-      public int compare(ArrayList<String> airport1, ArrayList<String> airport2)
-      {
-        int totalFlights1 = Integer.parseInt(airport1.get(1));
-        int totalFlights2 = Integer.parseInt(airport2.get(1));
-        return Integer.compare(totalFlights2, totalFlights1);
-      }
-    });
-    //test to show it works
-    for (ArrayList<String> airportInfo : airportFlights)
-    {
-        System.out.println("Airport: " + airportInfo.get(0) + ", Total Flights: " + airportInfo.get(1));
-    }
-   return airportFlights;
-}
-
+  
 public static ArrayList<ArrayList<String>> busiestStatesInSet (ArrayList<Flight> flights) //jake
 {
     ArrayList<String> statesInArrayList =  getAllStates(flights);
@@ -567,7 +558,7 @@ public static ArrayList<String> getAirlinesFromAirport (ArrayList<Flight> flight
   return new ArrayList<>(airlines);
 }
 
-public static ArrayList<ArrayList<String>> citiesSortedByMostOutgoingFlights (ArrayList<Flight> flights)
+public static ArrayList<ArrayList<String>> citiesSortedByMostOutgoingFlights (ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<String> citiesInArrayList =  getAllCities(flights);
     ArrayList<ArrayList<String>> cityFlights = new ArrayList<>(); //2d arrayList/ arrayList of arrayList of strings (column 0 stores airport, column 1 total flights as string)
@@ -597,7 +588,7 @@ public static ArrayList<ArrayList<String>> citiesSortedByMostOutgoingFlights (Ar
 }
 
 
-public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight> flights1, ArrayList<Flight> flights2) 
+public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight> flights1, ArrayList<Flight> flights2) //Fiachra
 {
     ArrayList<Flight> commonFlights = new ArrayList<>();
     for (int i = 0; i < flights1.size(); i++) 
@@ -616,12 +607,12 @@ public static ArrayList<Flight> getCommonFlightsInTwoArrayLists(ArrayList<Flight
     return commonFlights;
 }
 
-public static ArrayList<Flight> sortQuickestFlights(ArrayList<Flight> flights) 
+public static ArrayList<Flight> sortQuickestTimeFlights(ArrayList<Flight> flights)  //Fiachra
 {
     ArrayList<Flight> quickestFlights = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
-      if ( flights.get(i).isCancelled != 1)
+      if ( flights.get(i).isCancelled != 1 && flights.get(i).isDiverted != 1)
       {
         Flight flight = flights.get(i);
         quickestFlights.add(flight);
@@ -631,17 +622,18 @@ public static ArrayList<Flight> sortQuickestFlights(ArrayList<Flight> flights)
     {
         public int compare(Flight flight1, Flight flight2) 
         {
-            return Integer.compare( flight2.actualTimeTaken, flight1.actualTimeTaken);  
+            return Integer.compare( flight1.actualTimeTakenInMinutes, flight2.actualTimeTakenInMinutes);  
         }
     });
     return quickestFlights;
 }
 
 public static ArrayList<Flight> getQuickestRouteBetweenAirportsWithinTimeRange (ArrayList<Flight> flights, ArrayList<String> originAirports, ArrayList<String> destinationAirports, int minTime, int maxTime)
+//Fiachra
 {
   ArrayList<Flight> originalAirports = getFlightsAssociatedWithOriginAirport(flights, originAirports);
   ArrayList<Flight> routes = getFlightsAssociatedWithDestAirport(originalAirports, destinationAirports);
-  ArrayList<Flight> quickestRoutes = getQuickestFlightsWithinRange( routes , minTime, maxTime);
+  ArrayList<Flight> quickestRoutes = getQuickestTimeFlightsWithinRange( routes , minTime, maxTime);
   return quickestRoutes;
 }
 
@@ -673,33 +665,31 @@ public static ArrayList<Flight> getFirstFlightsScheduledBetweenAirports (ArrayLi
     return firstFlights;
 }
 
-public static ArrayList<Flight> getQuickestFlightsWithinRange(ArrayList<Flight> flights, int minTime, int maxTime) 
+public static ArrayList<Flight> getQuickestTimeFlightsWithinRange(ArrayList<Flight> flights, int minTimeInMinutes, int maxTimeInMinutes) //Fiachra
 {
     ArrayList<Flight> FlightsWithinRange = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
       Flight flight = flights.get(i);
-    if ( flights.get(i).actualTimeTaken >= minTime && flights.get(i).actualTimeTaken <= maxTime 
+    if ( flights.get(i).actualTimeTakenInMinutes >= minTimeInMinutes && flights.get(i).actualTimeTakenInMinutes <= maxTimeInMinutes 
     && flights.get(i).isCancelled == 0)
       {
         FlightsWithinRange.add(flight);
       }
     }
-   ArrayList<Flight> Flights = sortQuickestFlights(FlightsWithinRange);
+   ArrayList<Flight> Flights = sortQuickestTimeFlights(FlightsWithinRange);
    return Flights;
 }
     
 
 
-
-
-public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights) 
+public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<Flight> lateFlights = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
         Flight flight = flights.get(i);
-        if (flights.get(i).lateness > 0) 
+        if (flights.get(i).departureLateness > 0  && flights.get(i).isCancelled == 0 && flights.get(i).isDiverted == 0) 
         {
           lateFlights.add(flight);
         }
@@ -710,19 +700,19 @@ public static ArrayList<Flight> getFlightsSortedByLateness(ArrayList<Flight> fli
         {
           // currently sorts from most late to least late. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
           // will sort from least late to most late
-            return Integer.compare( flight2.lateness, flight1.lateness);  
+            return Integer.compare( flight2.departureLateness, flight1.departureLateness);  
         }
     });
     return lateFlights;
 }
 
-public static ArrayList<Flight> getFlightsSortedByLatestArrival(ArrayList<Flight> flights) 
+public static ArrayList<Flight> getFlightsSortedByLatestArrival(ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<Flight> lateFlights = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
         Flight flight = flights.get(i);
-        if (flights.get(i).arrivalLateness > 0) 
+        if (flights.get(i).arrivalLateness > 0  && flights.get(i).isCancelled == 0 && flights.get(i).isDiverted == 0) 
         {
           lateFlights.add(flight);
         }
@@ -741,13 +731,13 @@ public static ArrayList<Flight> getFlightsSortedByLatestArrival(ArrayList<Flight
 
 
 
-public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights) 
+public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<Flight> earlyFlights = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
         Flight flight = flights.get(i);
-        if (flights.get(i).earliness > 0) 
+        if (flights.get(i).departureEarliness > 0  && flights.get(i).isCancelled == 0 && flights.get(i).isDiverted == 0) 
         {
           earlyFlights.add(flight);
         }
@@ -758,19 +748,19 @@ public static ArrayList<Flight> getFlightsSortedByEarliness(ArrayList<Flight> fl
         {
           // currently sorts from most early to least early. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
           // will sort from least early to most early
-            return Integer.compare( flight2.earliness, flight1.earliness);  
+            return Integer.compare( flight2.departureEarliness, flight1.departureEarliness);  
         }
     });
     return earlyFlights;
 }
 
-public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flight> flights) 
+public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flight> flights) //Fiachra
 {
     ArrayList<Flight> earlyFlights = new ArrayList<>();
     for (int i = 0; i < flights.size(); i++) 
     {
         Flight flight = flights.get(i);
-        if (flights.get(i).arrivalEarliness > 0) 
+        if (flights.get(i).arrivalEarliness > 0  && flights.get(i).isCancelled == 0  && flights.get(i).isDiverted == 0 ) 
         {
           earlyFlights.add(flight);
         }
@@ -779,8 +769,6 @@ public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flig
     {
         public int compare(Flight flight1, Flight flight2) 
         {
-          // currently sorts from most early to least early. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
-          // will sort from least early to most early
             return Integer.compare( flight2.arrivalEarliness, flight1.arrivalEarliness);  
         }
     });
@@ -788,7 +776,68 @@ public static ArrayList<Flight> getFlightsSortedByEarliestArrival(ArrayList<Flig
 }
 
 
-public static ArrayList<Flight> sortFlightsByScheduledDeparture(ArrayList<Flight> flights)
+public static ArrayList<Flight> getRoutes(ArrayList<Flight> originAirports, ArrayList<Flight> destinationAirports) //Fiachra
+{
+  ArrayList<Flight> commonFlights = query.getCommonFlightsInTwoArrayLists(originAirports, destinationAirports);
+  return commonFlights;
+}
+
+public static int properTimeTaken(int departure, int arrival)
+{
+  if (arrival < departure)
+  {
+    arrival += 1440;
+  }
+  return arrival - departure;
+}
+
+public static int actualLateOrEarliness(int scheduledDepartureMinutes, int actualDepartureMinutes) //Fiachra
+{
+    // labels only when calculating late flights. When calculating Early flights everything is swapped
+    int difference = actualDepartureMinutes - scheduledDepartureMinutes;
+    // If the flight was supposed to depart before midnight and actually departed after midnight
+    // Or it was supposed to arrive after midnight and actually arrived before midnight
+    if (difference < -720 )
+    { 
+       difference += 1440; // if more than 12 hours negative difference or , Adjust by a full day in minute
+    } 
+    else if (difference > 720 )
+    { 
+       difference -= 1440; // if more than 12 hours positive difference, Adjust by reducing a full day in minutes
+    }
+    return difference;
+}
+
+public static int getActualTimeInMinutes(int time) 
+{
+      int TimeInMinutes = (time / 100) * 60 + (time % 100);
+      return TimeInMinutes;
+}
+
+public static ArrayList<Flight> getFastestFlights( ArrayList<Flight> flights)  //Fiachra
+    {
+     
+      ArrayList<Flight> fastestFlights = new ArrayList<Flight>();
+      for( int i = 0; i<flights.size(); i++ )
+      {
+        Flight flight = flights.get(i);
+        if (flights.get(i).flightAverageSpeed > 0  && flights.get(i).isCancelled == 0  && flights.get(i).isDiverted == 0 ) 
+        {
+        fastestFlights.add(flight);
+        }
+      }
+        Collections.sort(fastestFlights, new Comparator<Flight>() 
+        {
+        public int compare(Flight flight1, Flight flight2) 
+        {
+          // currently sorts from most late to least late. Switching to "return Integer.compare( flight1.lateness, flight2.lateness)"
+          // will sort from least late to most late
+            return Double.compare( flight2.flightAverageSpeed, flight1.flightAverageSpeed);  
+        }
+    }); 
+    return fastestFlights;
+    }
+    public static ArrayList<Flight> sortFlightsByScheduledDeparture(ArrayList<Flight> flights)
 {
     Collections.sort(flights, new Comparator<Flight>() 
     {
@@ -802,7 +851,7 @@ public static ArrayList<Flight> sortFlightsByScheduledDeparture(ArrayList<Flight
     return flights;
 }
 
-public static ArrayList<Flight> sortFlightsByActualArrival(ArrayList<Flight> flights)
+public static ArrayList<Flight> sortFlightsByActualArrival(ArrayList<Flight> flights) //Kiley
 {
     Collections.sort(flights, new Comparator<Flight>() 
     {
@@ -816,22 +865,37 @@ public static ArrayList<Flight> sortFlightsByActualArrival(ArrayList<Flight> fli
     return flights;
 }
 
-
-
-public static ArrayList<Flight> getRoutes(ArrayList<Flight> originAirports, ArrayList<Flight> destinationAirports) 
+public static String putTimeIntoHoursAndMinutes(int time)  //Fiachra
 {
-  ArrayList<Flight> commonFlights = query.getCommonFlightsInTwoArrayLists(originAirports, destinationAirports);
-  return commonFlights;
-}
-
-public static int properTimeTaken(int departure, int arrival)
-{
-  if (arrival < departure)
+   String flightString = "";
+   int hours = time /60;
+   int  minutes = time % 60;
+  if (hours > 0) 
   {
-    arrival += 2400;
-  }
-  return arrival - departure;
+    flightString += hours + " hour" + (hours > 1 ? "s" : ""); // If hours is greater than 1, use "hours" otherwise use "hour"
+  }  
+ if (minutes > 0) 
+ {
+    if (hours > 0) 
+    {
+        flightString += " and "; // Add "and" if both hours and minutes are present
+    }
+    flightString += minutes + " minute" + (minutes > 1 ? "s" : ""); // If minutes is greater than 1, use "minutes" otherwise use "minute"
 }
+flightString += ".";
+return flightString;
+}
+
+public static String convertTo24HourFormat(int time) //Fiachra
+{
+    int hours = time / 100;
+    int minutes = time % 100;
+    String hoursStr = (hours < 10) ? "0" + hours : String.valueOf(hours);
+    String minutesStr = (minutes < 10) ? "0" + minutes : String.valueOf(minutes);
+    String time24HourFormat = hoursStr + ":" + minutesStr;     // Put into 24-hour format
+    return time24HourFormat;
+}
+
 }
 
  
